@@ -1,15 +1,12 @@
 warn("@on")
 
--- if #arg == 0 then
---     error("Empty input parameters are not allowed.")
--- elseif #arg > 1 then
---     warn("Only the first input parameter will be accepted.")
--- end
+if #arg == 0 then
+    error("Empty input parameters are not allowed.")
+elseif #arg > 1 then
+    warn("Only the first input parameter will be accepted.")
+end
 
--- local target = arg[1] .. "." .. "target"
-
-
-local target = require("stm32h750.target")
+local target = require(arg[1] .. "." .. "target")
 local platfrom = require("platform")
 
 for _, tbl in pairs(target.io) do
