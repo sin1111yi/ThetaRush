@@ -1,3 +1,22 @@
+--[[
+-- This file is a part of ThetaRush.
+--
+-- ThetaRush is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- ThetaRush is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+-- GNU General Public License for more details.
+--
+-- You should have received a copy of the GNU General Public License
+-- along with this program.
+--
+-- If not, see <https://www.gnu.org/licenses/>.
+]]
+
 local M = {}
 
 M.resources_max = {
@@ -15,6 +34,25 @@ M.resources = {
         bus_uart = 2,
         bus_spi = 3,
         bus_i2c = 4,
+        timer = 5
+    },
+
+    type = {
+        bus_uart = {
+            TX = 11,
+            RX = 12,
+            TXRX = 13,
+        },
+        bus_spi = {
+            TX = 21,
+            RX = 22,
+            TXRX = 23,
+        },
+        timer = {
+            clock = 31,
+            pwmin = 32,
+            pwmout = 33,
+        }
     },
 
     io = (function()
@@ -37,6 +75,8 @@ M.resources = {
             local uart_name = "UART" .. uart_num
             tbl_bus_uart[uart_name] = {
                 port = "BUS_" .. uart_name,
+                tx = "BUS_" .. uart_name .. "_TX_PIN",
+                rx = "BUS_" .. uart_name .. "_RX_PIN",
             }
         end
         return tbl_bus_uart
@@ -48,6 +88,12 @@ M.resources = {
             local spi_name = "SPI" .. spi_num
             tbl_bus_spi[spi_name] = {
                 port = "BUS_" .. spi_name,
+                mosi = "BUS_" .. spi_name .. "_MOSI_PIN",
+                miso = "BUS_" .. spi_name .. "_MISO_PIN",
+                sclk = "BUS_" .. spi_name .. "_SCLK_PIN",
+                ncs = function(id)
+                    return "BUS_" .. spi_name .. "_NCS" .. id .. "_PIN"
+                end,
             }
         end
         return tbl_bus_spi
@@ -59,6 +105,8 @@ M.resources = {
             local i2c_name = "I2C" .. i2c_num
             tbl_bus_i2c[i2c_name] = {
                 port = "BUS_" .. i2c_name,
+                sck = "BUS_" .. i2c_name .. "_SCK_PIN",
+                sda = "BUS_" .. i2c_name .. "_SDA_PIN",
             }
         end
         return tbl_bus_i2c
@@ -147,39 +195,25 @@ end
 function definer:bus_uart(opts)
     local strict_tbl = {}
     local fields = {}
-    local uart_type = { "TX", "RX", "TXRX" }
 
-    definer:addf(fields, "name", "forced")
     definer:addf(fields, "bus", "forced")
     definer:addf(fields, "type", "forced")
     definer:addf(fields, "dma", "forced")
 
+    definer:addf(fields, "name", "optional")
     definer:addf(fields, "owner", "optional")
 
     for k, v in pairs(opts) do
         if k == "type" then
-            local valid = false
-
-            for _, type in ipairs(uart_type) do
-                if v == type then
-                    valid = true
-                    break
-                end
-            end
-
-            if not valid then
-                error(string.format('"type" must be one of "TX", "RX", "TXRX"'))
-            else
-                if v == "TX" then
-                    definer:addf(fields, "tx", "forced")
-                    definer:addf(fields, "rx", "optional")
-                elseif v == "RX" then
-                    definer:addf(fields, "tx", "optional")
-                    definer:addf(fields, "rx", "forced")
-                elseif v == "TXRX" then
-                    definer:addf(fields, "tx", "forced")
-                    definer:addf(fields, "rx", "forced")
-                end
+            if v == M.resources.type.bus_uart.TX then
+                definer:addf(fields, "tx", "forced")
+                definer:addf(fields, "rx", "optional")
+            elseif v == M.resources.type.bus_uart.RX then
+                definer:addf(fields, "tx", "optional")
+                definer:addf(fields, "rx", "forced")
+            elseif v == M.resources.type.bus_uart.TXRX then
+                definer:addf(fields, "tx", "forced")
+                definer:addf(fields, "rx", "forced")
             end
         end
     end
@@ -204,47 +238,37 @@ function definer:bus_uart(opts)
         end
     end
 
+    if strict_tbl.name == nil then
+        strict_tbl.name = strict_tbl.bus.port
+    end
+
     return strict_tbl
 end
 
 function definer:bus_spi(opts)
     local strict_tbl = {}
     local fields = {}
-    local spi_type = { "TX", "RX", "TXRX" }
 
-    definer:addf(fields, "name", "forced")
     definer:addf(fields, "bus", "forced")
     definer:addf(fields, "type", "forced")
     definer:addf(fields, "ncs", "forced")
     definer:addf(fields, "sclk", "forced")
     definer:addf(fields, "dma", "forced")
 
+    definer:addf(fields, "name", "optional")
     definer:addf(fields, "owner", "optional")
 
     for k, v in pairs(opts) do
         if k == "type" then
-            local valid = false
-
-            for _, type in ipairs(spi_type) do
-                if v == type then
-                    valid = true
-                    break
-                end
-            end
-
-            if not valid then
-                error(string.format('"type" must be one of "TX", "RX", "TXRX"'))
-            else
-                if v == "TX" then
-                    definer:addf(fields, "miso", "optional")
-                    definer:addf(fields, "mosi", "forced")
-                elseif v == "RX" then
-                    definer:addf(fields, "miso", "forced")
-                    definer:addf(fields, "mosi", "optional")
-                elseif v == "TXRX" then
-                    definer:addf(fields, "miso", "forced")
-                    definer:addf(fields, "mosi", "forced")
-                end
+            if v == M.resources.type.bus_spi.TX then
+                definer:addf(fields, "miso", "optional")
+                definer:addf(fields, "mosi", "forced")
+            elseif v == M.resources.type.bus_spi.RX then
+                definer:addf(fields, "miso", "forced")
+                definer:addf(fields, "mosi", "optional")
+            elseif v == M.resources.type.bus_spi.TXRX then
+                definer:addf(fields, "miso", "forced")
+                definer:addf(fields, "mosi", "forced")
             end
         elseif k == "ncs" then
             if v[1] == nil then
@@ -285,6 +309,10 @@ function definer:bus_spi(opts)
         end
     end
 
+    if strict_tbl.name == nil then
+        strict_tbl.name = strict_tbl.bus.port
+    end
+
     return strict_tbl
 end
 
@@ -292,12 +320,12 @@ function definer:bus_i2c(opts)
     local strict_tbl = {}
     local fields = {}
 
-    definer:addf(fields, "name", "forced")
     definer:addf(fields, "bus", "forced")
-    definer:addf(fields, "scl", "forced")
+    definer:addf(fields, "sck", "forced")
     definer:addf(fields, "sda", "forced")
     definer:addf(fields, "dma", "forced")
 
+    definer:addf(fields, "name", "optional")
     definer:addf(fields, "owner", "optional")
 
     setmetatable(strict_tbl, {
@@ -320,13 +348,17 @@ function definer:bus_i2c(opts)
         end
     end
 
+    if strict_tbl.name == nil then
+        strict_tbl.name = strict_tbl.bus.port
+    end
+
     return strict_tbl
 end
 
 M.config = function(tbl)
     local strict_tbl = {}
     local fields = {}
-    definer:addf(fields, "series", "forced")
+    definer:addf(fields, "mcu_series", "forced")
     definer:addf(fields, "mcu", "forced")
     definer:addf(fields, "identifier", "forced")
     definer:addf(fields, "toolchain", "forced")
