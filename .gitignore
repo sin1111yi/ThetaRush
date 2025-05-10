@@ -1,2 +1,5 @@
 build
 .vscode
+*.xmind
+target.h
+target.cmake
