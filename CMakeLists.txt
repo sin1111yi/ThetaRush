@@ -24,6 +24,9 @@ set(CMAKE_C_EXTENSIONS              ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS   ON)
 set(DISABLE_COMPILER_CONF           0)
 
+set(__PROJECT_NAME "TheRush_${TARGET}")
+project(${__PROJECT_NAME} VERSION 0.1 LANGUAGES C ASM)
+
 # Define the log level
 if (NOT LOG_LEVEL)
     set(LOG_LEVEL INFO)
@@ -34,29 +37,19 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
+#[[
+#   TODO: add envirnmont check, such as lua, arm-none-eabi-toolchain and so on
+#]]
+
 if(NOT EXISTS ${PROJECT_TARGET_DIR})
     LOG_ERROR("Target ${PROJECT_TARGET_DIR} was defined but does not exist.")
     return()
 endif()
 
-if(NOT EXISTS ${PROJECT_TARGET_DIR}/target.cmake)
-    LOG_ERROR("Target defination file does not exist.")
-    return()
-endif()
-
+add_subdirectory("target")
 include("${PROJECT_TARGET_DIR}/target.cmake") # get target configurations
-if(NOT DEFINED TARGET_MCU OR NOT DEFINED TARGET_MCU_FAMILY OR NOT DEFINED TARGET_BUILD_TOOLCHAIN)
-    LOG_ERROR("Missing defination(s) in ${PROJECT_TARGET_DIR}/target.cmake.")
-    return()
-else()
-    LOG_INFO("Target mcu \"${TARGET_MCU}\" belong to family \"${TARGET_MCU_FAMILY}\", using toolchain \"${TARGET_BUILD_TOOLCHAIN}\".")
-endif()
 
 include("toolchain/${TARGET_BUILD_TOOLCHAIN}.cmake") # compilers configurations
-
-set(__PROJECT_NAME "TheRush_${TARGET}")
-
-project(${__PROJECT_NAME} VERSION 0.1 LANGUAGES C ASM)
 
 add_executable(${CMAKE_PROJECT_NAME})
 
