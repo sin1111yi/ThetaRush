@@ -10,6 +10,7 @@ if(NOT WIN32)
     set(LOG_COLOR_DEBUG "${Esc}[1;36m" CACHE INTERNAL "LOG_COLOR_DEBUG") # Bold Blue
 else()
     option(ENABLE_ANSI_COLORS "enable ANSI colors" OFF)
+
     if(ENABLE_ANSI_COLORS)
         set(LOG_COLOR_RESET " 001B[0m" CACHE INTERNAL "")
         set(LOG_COLOR_ERROR " 001B[1;31m" CACHE INTERNAL "LOG_COLOR_ERROR")
@@ -26,9 +27,19 @@ else()
 endif()
 
 function(__LOG_MESSAGE)
-    set(oneValueArgs LEVEL PREFIX)
+    set(options "")
+    set(oneValueArgs
+        LEVEL
+        PREFIX
+    )
     set(multiValueArgs TEXT)
-    cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    cmake_parse_arguments(
+        ARG
+        "${options}"
+        "${oneValueArgs}"
+        "${multiValueArgs}"
+        ${ARGN}
+    )
 
     set(LOG_COLOR "")
 
@@ -37,6 +48,7 @@ function(__LOG_MESSAGE)
 
     # verify current log level
     list(FIND valid_levels "${ARG_LEVEL}" current_level_index)
+
     if(current_level_index EQUAL -1)
         message(WARNING "Invalied log level: ${ARG_LEVEL}")
         return()
@@ -52,6 +64,7 @@ function(__LOG_MESSAGE)
 
     string(TOUPPER "${LOG_LEVEL}" normalized_log_level)
     list(FIND valid_levels "${normalized_log_level}" filter_level_index)
+
     if(filter_level_index EQUAL -1)
         message(WARNING "invalied LOG_LEVEL: ${LOG_LEVEL}, using default: INFO")
         set(filter_level_index 2)
@@ -87,3 +100,31 @@ function(LOG_DEBUG)
     __LOG_MESSAGE(LEVEL DEBUG PREFIX "DEBUG" TEXT ${ARGN})
 endfunction()
 
+function(DEBUG_DUMP_FILES)
+    set(options "")
+    set(oneValueArgs INFO)
+    set(multiValueArgs FILE_LIST)
+
+    cmake_parse_arguments(ARG
+        "${options}"
+        "${oneValueArgs}"
+        "${multiValueArgs}"
+        ${ARGN}
+    )
+
+    if(ARG_UNPARSED_ARGUMENTS)
+        LOG_WARN("Unknown parameters: ${ARG_UNPARSED_ARGUMENTS}")
+    endif()
+
+    if(NOT ARG_FILE_LIST)
+        LOG_ERROR("FILE_LIST is necessary.")
+    endif()
+
+    if(ARG_INFO)
+        LOG_DEBUG("${ARG_INFO}:")
+    endif()
+
+    foreach(_file IN LISTS ARG_FILE_LIST)
+        LOG_DEBUG("    ${_file}")
+    endforeach()
+endfunction()
