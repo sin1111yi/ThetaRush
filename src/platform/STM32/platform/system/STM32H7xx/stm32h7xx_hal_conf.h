@@ -572,8 +572,6 @@ extern "C"
 #define assert_param(expr) ((void)0U)
 #endif /* USE_FULL_ASSERT */
 
-  __attribute__ ((weak)) void Error_Handler (void);
-
 #ifdef __cplusplus
 }
 #endif
