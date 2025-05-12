@@ -223,6 +223,20 @@ chead.add_snippet(chead.protect_empty_marco(target.info.mcu_series))
 chead.add_snippet(chead.protect_marco("TARGET_IDENTIFIER", string.format('"%s"', target.info.identifier)))
 chead.add_snippet(chead.protect_marco("PROJECT_BUILD_TIME", string.format('"%s"', os.date("%d-%m-%Y %H:%M:%S"))))
 
+if target.info.debug == true then
+	chead_file:write([[
+// WARN: In this case, trace and debug interface will be disabled!
+//       Please ensure GPIOs of the interface are not occupied!
+]])
+	chead.add_snippet(chead.protect_empty_marco("__HARDWARE_DEBUG_ENABLED__"))
+
+elseif target.info.debug == false or target.info.debug == nil then
+	chead_file:write([[
+// WARN: In this case, trace and debug interface will be disabled!
+]])
+	chead.add_snippet(chead.protect_empty_marco("__HARDWARE_DEBUG_DISABLED__"))
+end
+
 for k, io in ipairs(target.io) do
 	local platformRes = "PLATFORM_RES" .. "(" .. "IO" .. ", " .. io.set .. ", " .. k .. ")"
 	local ioRes = "PLATFORM_RES" .. "_" .. "IO" .. "_" .. io.set .. "_" .. k
@@ -233,7 +247,6 @@ end
 
 print(string.format(
 	[[
-	target_config_gen.lua finished, file generated at %s.
-]],
+	target_config_gen.lua finished, file generated at %s.]],
 	config.target
 ))

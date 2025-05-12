@@ -26,6 +26,7 @@ M.info = {
     mcu_series = "STM32H7",
     identifier = "weact_stm32h750vbtx_core_board",
     toolchain = "arm-none-eabi",
+    debug = tr.set.debug.enable,
 }
 
 M.io = {

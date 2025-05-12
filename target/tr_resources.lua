@@ -20,6 +20,11 @@
 local M = {}
 
 M.set = {
+    debug = {
+        enable = true,
+        disbale = false,
+    },
+
     led = "OUTPUT",
     key = "INPUT",
     bus_spi = {
