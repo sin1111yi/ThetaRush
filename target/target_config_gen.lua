@@ -201,33 +201,27 @@ local chead = {
 }
 
 cmake_file:write(licenses_declaration.cmake)
+cmake_file:write(string.format('set(%s %s CACHE INTERNAL "Target MCU")\n', "TARGET_MCU", target.info.mcu))
 cmake_file:write(
-	string.format("set(%s %s CACHE INTERNAL \"Target MCU\")\n",
-		"TARGET_MCU",
-		target.info.mcu
-	))
+	string.format('set(%s %s CACHE INTERNAL "Target MCU Series")\n', "TARGET_MCU_SERIES", target.info.mcu_series)
+)
 cmake_file:write(
-	string.format("set(%s %s CACHE INTERNAL \"Target MCU Series\")\n",
-		"TARGET_MCU_SERIES",
-		target.info.mcu_series
-	))
+	string.format('set(%s "%s" CACHE INTERNAL "Target Identifier")\n', "TARGET_IDENTIFIER", target.info.identifier)
+)
 cmake_file:write(
-	string.format("set(%s \"%s\" CACHE INTERNAL \"Target Identifier\")\n",
-		"TARGET_IDENTIFIER",
-		target.info.identifier
-	))
-cmake_file:write(
-	string.format("set(%s %s CACHE INTERNAL \"Target Build Toolchain\")\n",
+	string.format(
+		'set(%s %s CACHE INTERNAL "Target Build Toolchain")\n',
 		"TARGET_BUILD_TOOLCHAIN",
 		target.info.toolchain
-	))
+	)
+)
 
 chead.add_snippet(licenses_declaration.c_cpp)
 chead.add_snippet("#pragma once\n")
 chead.add_snippet(chead.protect_empty_marco(target.info.mcu))
 chead.add_snippet(chead.protect_empty_marco(target.info.mcu_series))
 chead.add_snippet(chead.protect_marco("TARGET_IDENTIFIER", string.format('"%s"', target.info.identifier)))
-chead.add_snippet(chead.protect_marco("PROJECT_BUILD_TIME", string.format("\"%s\"", os.date("%d-%m-%Y %H:%M:%S"))))
+chead.add_snippet(chead.protect_marco("PROJECT_BUILD_TIME", string.format('"%s"', os.date("%d-%m-%Y %H:%M:%S"))))
 
 for k, io in ipairs(target.io) do
 	local platformRes = "PLATFORM_RES" .. "(" .. "IO" .. ", " .. io.set .. ", " .. k .. ")"
@@ -236,3 +230,10 @@ for k, io in ipairs(target.io) do
 	chead.add_marco(io.owner .. "__" .. "PIN", platformRes)
 	chead.add_marco(ioRes, io.source)
 end
+
+print(string.format(
+	[[
+	target_config_gen.lua finished, file generated at %s.
+]],
+	config.target
+))

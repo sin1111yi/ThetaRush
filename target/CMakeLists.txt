@@ -21,7 +21,7 @@ cmake_minimum_required(VERSION 3.22)
 
 set(LIB_TARGET_DEF_INTERFACE libinterface_${TARGET}_defs)
 
-if(NOT EXISTS ${PROJECT_TARGET_CONFIG_DIR}/target.lua)
+if(NOT EXISTS ${PROJECT_TARGET_CONFIG_PATH}/target.lua)
     LOG_ERROR("Target defination file does not exist.")
     return()
 endif()
@@ -40,15 +40,15 @@ execute_process(
     RESULT_VARIABLE GEN_RESULT
 )
 
-if(NOT EXISTS ${PROJECT_TARGET_CONFIG_DIR}/target.h OR NOT EXISTS ${PROJECT_TARGET_CONFIG_DIR}/target.cmake)
+if(NOT EXISTS ${PROJECT_TARGET_CONFIG_PATH}/target.h OR NOT EXISTS ${PROJECT_TARGET_CONFIG_PATH}/target.cmake)
     LOG_ERROR("Run target/generate.lua with target ${PROJECT_TARGET} failed.")
     return()
 endif()
 
-include("${PROJECT_TARGET_CONFIG_DIR}/target.cmake")
+include("${PROJECT_TARGET_CONFIG_PATH}/target.cmake")
 
 if(NOT DEFINED TARGET_MCU OR NOT DEFINED TARGET_MCU_SERIES OR NOT DEFINED TARGET_BUILD_TOOLCHAIN)
-    LOG_ERROR("Missing defination(s) in ${PROJECT_TARGET_CONFIG_DIR}/target.cmake.")
+    LOG_ERROR("Missing defination(s) in ${PROJECT_TARGET_CONFIG_PATH}/target.cmake.")
     return()
 else()
     LOG_INFO("Target mcu \"${TARGET_MCU}\" belong to series \"${TARGET_MCU_SERIES}\", using toolchain \"${TARGET_BUILD_TOOLCHAIN}\".")
@@ -60,15 +60,25 @@ if(${TARGET_MCU_SERIES} STREQUAL "STM32H7")
         USE_HAL_DRIVER
         ${TARGET_MCU}
         CACHE INTERNAL "Target mcu compile flags.")
-    set(TARGET_MCU_VENDOR ST PARENT_SCOPE) 
-    set(TARGET_MCU_PLATFORM STM32 PARENT_SCOPE)
+    set(TARGET_MCU_VENDOR ST CACHE INTERNAL "Target MCU Vendor")
+    set(TARGET_MCU_PLATFORM STM32 CACHE INTERNAL "Target MCU Platform")
 endif()
+
+set(TARGET_PLATFORM_PATH
+    ${PROJECT_SOURCES_PATH}/platform/${TARGET_MCU_PLATFORM}
+    CACHE INTERNAL
+    "Target Platform Path")
+
+set(TARGET_PLATFORM_SYSTEM_PATH
+    ${TARGET_PLATFORM_PATH}/platform/system/${TARGET_MCU_SERIES}xx
+    CACHE INTERNAL
+    "Target Platform System Path")
 
 LOG_INFO("Add Library ${LIB_TARGET_DEF_INTERFACE}")
 add_library(${LIB_TARGET_DEF_INTERFACE} INTERFACE)
 target_include_directories(${LIB_TARGET_DEF_INTERFACE}
     INTERFACE
-    ${PROJECT_TARGET_CONFIG_DIR}
+    ${PROJECT_TARGET_CONFIG_PATH}
 )
 target_compile_definitions(${LIB_TARGET_DEF_INTERFACE}
     INTERFACE

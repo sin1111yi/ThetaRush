@@ -35,7 +35,7 @@ set(PROJECT_ROOT_PATH            ${CMAKE_SOURCE_DIR})
 set(PROJECT_SOURCES_PATH         ${PROJECT_ROOT_PATH}/src)
 set(PROJECT_LIBRARIES_PATH       ${PROJECT_ROOT_PATH}/libs)
 set(PROJECT_TARGET_PATH          ${PROJECT_ROOT_PATH}/target)
-set(PROJECT_TARGET_CONFIG_DIR    ${PROJECT_TARGET_PATH}/${PROJECT_TARGET})
+set(PROJECT_TARGET_CONFIG_PATH   ${PROJECT_TARGET_PATH}/${PROJECT_TARGET})
 
 set(CMAKE_C_STANDARD                11)
 set(CMAKE_C_STANDARD_REQUIRED       ON)
@@ -57,14 +57,14 @@ endif()
 #   TODO: add envirnmont check, such as lua, arm-none-eabi-toolchain and so on
 #]]
 
-if(NOT EXISTS ${PROJECT_TARGET_CONFIG_DIR})
-    LOG_ERROR("Target ${PROJECT_TARGET_CONFIG_DIR} was defined but does not exist.")
+if(NOT EXISTS ${PROJECT_TARGET_CONFIG_PATH})
+    LOG_ERROR("Target ${PROJECT_TARGET_CONFIG_PATH} was defined but does not exist.")
     return()
 endif()
 
 add_subdirectory("target")
 include("toolchain/${TARGET_BUILD_TOOLCHAIN}.cmake") # compilers configurations
-include("${PROJECT_TARGET_CONFIG_DIR}/target.cmake") # get target configurations
+include("${PROJECT_TARGET_CONFIG_PATH}/target.cmake") # get target configurations
 
 project(${__PROJECT_NAME} VERSION 0.1 LANGUAGES C ASM)
 

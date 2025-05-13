@@ -70,7 +70,7 @@ add_library(${TARGET_DRV_INTERFACE} INTERFACE)
 target_include_directories(${TARGET_DRV_INTERFACE}
     INTERFACE
     ${TARGET_DRV_INTERFACE_INC_PATH}
-    ${PROJECT_SOURCES_PATH}/platform/${TARGET_MCU_PLATFORM}/platform/system
+    ${TARGET_PLATFORM_SYSTEM_PATH}
 )
 target_compile_definitions(${TARGET_DRV_INTERFACE}
     INTERFACE
