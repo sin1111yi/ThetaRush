@@ -52,6 +52,7 @@
 #include <math.h>
 
 #include "target.h"
+#include "platform/memprot.h"
 
 #if defined(STM32H750xx)
 
@@ -59,7 +60,7 @@
 #error "Compiling conflict system_stm32xx.c is not allowed."
 #else
 #define __SYSTEM_STM32__
-#endif
+#endif /* __SYSTEM_STM32__ */
 
 #if !defined(HSE_VALUE)
 #define HSE_VALUE                                                             \
@@ -591,6 +592,10 @@ SystemInit (void)
 
   SystemClock_Config ();
   SystemCoreClockUpdate ();
+
+    // Configure MPU
+
+  memProtConfigure(mpuRegions, mpuRegionCount);
 
   // Enable CPU L1-Cache
   SCB_EnableICache ();

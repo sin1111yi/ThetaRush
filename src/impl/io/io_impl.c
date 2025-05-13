@@ -31,25 +31,17 @@
 static implIOInterface_t g_implIOInterface = { 0 };
 
 void
-implIOInit (implRes_t res)
+implIOInit (implClew_t clew)
 {
 #if defined(__PLATFORM_STM32__)
-  IO_t io = { 0 };
-  io.ioTag = res;
-  io.ioDef.pin = res & 0x0000ffff;
-  // res is (GPIO_TAG_x << 16 | GPIO_PIN_x)
-  // see in platform/STM32/platform/periph/io/io_res.h
-  // GPIO_TAG_x is from A(1) to J(10)
-  // convert to GPIOx register address: ((((res & 0xffff0000) >> 16) << 8) * 4)
-  io.ioDef.gpiox = (void *)((res & 0xffff0000) >> 6);
-  stm32IOInit (io);
+
 #else
   NOP;
 #endif
 }
 
 bool
-implIORead (implRes_t res)
+implIORead (implClew_t clew)
 {
 #if defined(__PLATFORM_STM32__)
 #else
@@ -59,7 +51,7 @@ implIORead (implRes_t res)
 }
 
 void
-implIOWrite (implRes_t res)
+implIOWrite (implClew_t clew)
 {
 #if defined(__PLATFORM_STM32__)
 #else
@@ -68,7 +60,7 @@ implIOWrite (implRes_t res)
 }
 
 void
-implIOHi (implRes_t res)
+implIOHi (implClew_t clew)
 {
 #if defined(__PLATFORM_STM32__)
 #else
@@ -77,7 +69,7 @@ implIOHi (implRes_t res)
 }
 
 void
-implIOLo (implRes_t res)
+implIOLo (implClew_t clew)
 {
 #if defined(__PLATFORM_STM32__)
 #else
@@ -86,7 +78,7 @@ implIOLo (implRes_t res)
 }
 
 void
-implIOToggle (implRes_t res)
+implIOToggle (implClew_t clew)
 {
 #if defined(__PLATFORM_STM32__)
 #else

@@ -27,6 +27,6 @@ void
 trDrvInit (void)
 {
 #if defined(USING_RUN_LED_1)
-  drvInterfaceHandle ()->pLedInit (TR_DEVICE (DEV_RUN_LED, 1));
+  drvInterfaceHandler ()->pLedInit (TR_DEVICE (devRunLed, 1));
 #endif
 }

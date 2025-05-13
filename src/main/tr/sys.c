@@ -17,10 +17,31 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "tr/sys.h"
+#include "tr/init.h"
 
-#include <stdint.h>
+#include "drivers/drv.h"
+#include "drivers/drv_defs.h"
 
-#define PLATFORM_RES(res, set, id) PLATFORM_RES_##res##_##set##_##id
+void
+systemInit (void)
+{
+  trDrvInit ();
+}
 
-typedef uint32_t implRes_t;
+void
+systemRun (void)
+{
+}
+
+static trSystemHandle_t g_trSystemHandle = {
+  .systemState = system_state_bootup,
+  .pSystemInit = systemInit,
+  .pSystemRun = systemRun,
+};
+
+trSystemHandle_t *
+trSystemHandle (void)
+{
+  return &g_trSystemHandle;
+}

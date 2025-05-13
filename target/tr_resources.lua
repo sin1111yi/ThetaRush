@@ -75,7 +75,7 @@ M.drv = {
         icm42688p ="ICM42688P"
     },
 
-    magn = {
+    compass = {
         qmc5883l = "QMC5883L"
     },
 

@@ -21,5 +21,9 @@
 
 #include "utils/utils.h"
 
-#define DEFIO_RES(pinid) CONTACT (IO_RES_I__, pinid)
-#define DEFIO_RES__NONE 0
+#define PLATFORM_RES(res, conf, id)                                           \
+  CONTACT4 (PLATFORM_RES__, res##_, conf##_, id)
+
+// use low 16 bits as resource identification
+// use high 16 bits as reource platfrom resource owner
+typedef uint32_t platfromResource_t;

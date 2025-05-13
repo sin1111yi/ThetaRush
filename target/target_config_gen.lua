@@ -96,6 +96,7 @@ if not cmake_file then
 end
 
 local target = require(config.target .. "." .. "target")
+local tr = require("tr_resources")
 
 local licenses_declaration = {
 	c_cpp = string.format([[
@@ -226,10 +227,9 @@ chead.add_snippet(chead.protect_marco("PROJECT_BUILD_TIME", string.format('"%s"'
 if target.info.debug == true then
 	chead_file:write([[
 // WARN: In this case, trace and debug interface will be disabled!
-//       Please ensure GPIOs of the interface are not occupied!
+//       Please ensure GPIOs of the SWD interface are not occupied!
 ]])
 	chead.add_snippet(chead.protect_empty_marco("__HARDWARE_DEBUG_ENABLED__"))
-
 elseif target.info.debug == false or target.info.debug == nil then
 	chead_file:write([[
 // WARN: In this case, trace and debug interface will be disabled!
@@ -237,12 +237,29 @@ elseif target.info.debug == false or target.info.debug == nil then
 	chead.add_snippet(chead.protect_empty_marco("__HARDWARE_DEBUG_DISABLED__"))
 end
 
+local outputIoNum = 0
+local inputIoNum = 0
+
 for k, io in ipairs(target.io) do
-	local platformRes = "PLATFORM_RES" .. "(" .. "IO" .. ", " .. io.set .. ", " .. k .. ")"
-	local ioRes = "PLATFORM_RES" .. "_" .. "IO" .. "_" .. io.set .. "_" .. k
-	chead.add_marco("USING_" .. io.owner, true)
-	chead.add_marco(io.owner .. "__" .. "PIN", platformRes)
-	chead.add_marco(ioRes, io.source)
+	local ioClew = {
+		device = nil,
+		implResource = nil,
+		platformResource = nil
+	}
+	if io.set == tr.set.led then
+		outputIoNum = outputIoNum + 1
+		ioClew.device = io.owner
+		ioClew.impl = "IMPL_RES" .. "(outputIO, " .. outputIoNum .. ")"
+		ioClew.platformResource = "PLATFORM_RES" .. "__" .. "IO" .. "_OUTPUT_" .. outputIoNum
+	elseif io.set == tr.set.key then
+		inputIoNum = inputIoNum + 1
+		ioClew.device = io.owner
+		ioClew.impl = "IMPL_RES" .. "(inputIO, " .. inputIoNum .. ")"
+		ioClew.platformResource = "PLATFORM_RES" .. "__" .. "IO" .. "_INPUT_" .. inputIoNum
+	end
+	chead.add_marco("USING_" .. ioClew.device, true)
+	chead.add_marco(io.owner .. "_" .. "DRV_IMPL", ioClew.impl)
+	chead.add_marco(ioClew.platformResource, io.source)
 end
 
 print(string.format(

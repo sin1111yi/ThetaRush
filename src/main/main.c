@@ -22,7 +22,7 @@
 
 #include "utils/utils.h"
 
-#include "tr/tr.h"
+#include "tr/sys.h"
 
 int
 main (int argc, char *argv[])

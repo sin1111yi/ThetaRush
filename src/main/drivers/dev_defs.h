@@ -19,46 +19,52 @@
 
 #pragma once
 
+#include "utils/utils.h"
 #include <stdint.h>
-
-#define TR_DEVICE(dev, id) DEVICE_##dev##_##id
-
-#define DRV_DEVICE_ID_BASE(dev) TR_DEVICE (dev, 1)
 
 #define DRV_NUM_OF_CLOCK 1
 #define DRV_NUM_OF_RUN_LED 3
 
 enum __device_e
 {
-  DEV_NONE,
-  DEV_CLOCK,
-  DEV_RUN_LED,
-  DEV_LED,
-  DEV_LED_STRIP,
-  DEV_IMU,
-  DEV_MAGN,
-  DEV_BARO,
-  DEV_MOTOR,
-  DEV_END,
+  devNone,
+  devClock,
+  devRunLed,
+  devLed,
+  devLedStrip,
+  devImu,
+  devCompass,
+  devBarometer,
+  devMotor,
+  devCount,
 };
 
 /**
- * @brief Id of ThetaRush devices starts from 1
+ * @brief Every tr device need a driver
+ *        Id of ThetaRush devices starts from 1
  *
  */
+
+#define TR_DEVICE(dev, id) CONTACT3 (trDevice_, dev##_, id)
+
+#define DRV_DEVICE_NONE TR_DEVICE (devNone, 1)
+#define DRV_DEVICE_ID_BASE(dev) TR_DEVICE (dev, 1)
+#define DRV_DEVICE_COUNT(dev) (TR_DEVICE (dev, n) - TR_DEVICE (dev, 1))
+
 typedef enum __trDevice_e
 {
-  TR_DEVICE (DEV_NONE, 1) = 0,
+  TR_DEVICE (devNone, 0) = 0,
 
-  TR_DEVICE (DEV_CLOCK, 1),
+  TR_DEVICE (devClock, 1),
+  TR_DEVICE (devClock, n),
 
-  TR_DEVICE (DEV_RUN_LED, 1),
-  TR_DEVICE (DEV_RUN_LED, 2),
-  TR_DEVICE (DEV_RUN_LED, 3),
+  TR_DEVICE (devRunLed, 1),
+  TR_DEVICE (devRunLed, 2),
+  TR_DEVICE (devRunLed, 3),
+  TR_DEVICE (devRunLed, n),
 
-  TR_DEVICE (DEV_LED, 1),
+  TR_DEVICE (devLed, 1),
+  TR_DEVICE (devLed, n),
 
-  TR_DEVICE (DEV_END, 1)
+  TR_DEVICE (devCount, 0)
 } trDevice_t;
-
-typedef uint32_t trDev_t;

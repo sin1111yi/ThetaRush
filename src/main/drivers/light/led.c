@@ -18,10 +18,12 @@
  */
 
 #include "drivers/light/led.h"
-#include "drivers/drv_defs.h"
+#include "drivers/dev_defs.h"
 
 #include "impl/impl_defs.h"
 #include "impl/io/io_impl.h"
+
+#include "target.h"
 
 static drvLightLed_t devRunLeds[DRV_NUM_OF_RUN_LED];
 
@@ -29,14 +31,12 @@ void
 drvLedInit (trDevice_t dev)
 {
   drvLightLed_t *instance
-      = &devRunLeds[dev - DRV_DEVICE_ID_BASE (DEV_RUN_LED)];
-  instance->dev = dev;
-  if (dev == TR_DEVICE (DEV_RUN_LED, 1))
+      = &devRunLeds[dev - DRV_DEVICE_ID_BASE (devRunLed)];
+  instance->clew.dev = dev;
+  if (dev == TR_DEVICE (devRunLed, 1))
     {
-#if defined(RUN_LED_1__PIN)
-      instance->binder = implDevBindRes (dev, IMPL_RES_IO (RUN_LED_1__PIN));
-      implIOInterfaceHandle ()->pIOInit (IMPL_RES_IO (RUN_LED_1__PIN));
-#endif
+        instance->clew.ires = RUN_LED_1_DRV_IMPL;
+        implIOInterfaceHandle()->pIOInit(instance->clew);
     }
 }
 

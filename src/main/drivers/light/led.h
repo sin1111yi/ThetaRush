@@ -21,14 +21,13 @@
 
 #include <stdint.h>
 
-#include "drivers/drv_defs.h"
+#include "drivers/dev_defs.h"
 #include "impl/impl_defs.h"
 #include "impl/io/io_impl.h"
 
 typedef struct __drvLightLed_s
 {
-  implBinder_t binder;
-  trDevice_t dev;
+  implClew_t clew;
 } drvLightLed_t;
 
 void drvLedInit (trDevice_t dev);

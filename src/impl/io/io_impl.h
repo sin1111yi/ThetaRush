@@ -22,7 +22,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "impl/impl_platform.h"
+#include "impl/impl_defs.h"
 #include "utils/utils.h"
 
 // for platforms which IOs not defined in the way port with pin number
@@ -47,20 +47,20 @@ typedef struct IO_s
 
 typedef struct implIOInterface_s
 {
-  void (*pIOInit) (implRes_t res);
-  bool (*pIORead) (implRes_t);
-  void (*pIOWrite) (implRes_t res);
-  void (*pIOHi) (implRes_t res);
-  void (*pIOLo) (implRes_t res);
-  void (*pIOToggle) (implRes_t res);
+  void (*pIOInit) (implClew_t clew);
+  bool (*pIORead) (implClew_t clew);
+  void (*pIOWrite) (implClew_t clew);
+  void (*pIOHi) (implClew_t clew);
+  void (*pIOLo) (implClew_t clew);
+  void (*pIOToggle) (implClew_t clew);
 } implIOInterface_t;
 
-void implIOInit (implRes_t res);
-bool implIORead (implRes_t res);
-void implIOWrite (implRes_t res);
-void implIOHi (implRes_t res);
-void implIOLo (implRes_t res);
-void implIOToggle (implRes_t res);
+void implIOInit (implClew_t clew);
+bool implIORead (implClew_t clew);
+void implIOWrite (implClew_t clew);
+void implIOHi (implClew_t clew);
+void implIOLo (implClew_t clew);
+void implIOToggle (implClew_t clew);
 
 void implIOInterfaceInit (void);
 implIOInterface_t *implIOInterfaceHandle (void);

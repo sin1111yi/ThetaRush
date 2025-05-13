@@ -26,6 +26,7 @@
 
 static void memProtConfigError(void)
 {
+    __disable_irq();
     for (;;) {}
 }
 

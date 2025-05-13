@@ -17,31 +17,48 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "tr/tr.h"
-#include "tr/init.h"
+#include "stm32h7xx.h"
 
-#include "drivers/drv.h"
-#include "drivers/drv_defs.h"
+#include "platform/periph/io/io.h"
+#include "platform/periph/io/io_af.h"
+#include "platform/periph/io/io_res.h"
 
-void
-systemInit (void)
+bool
+stm32IOInit (IO_t IO)
 {
-  trDrvInit ();
+    GPIO_TypeDef* gpiox = (GPIO_TypeDef*)IO.ioDef.gpiox;
+    uint16_t pin = IO.ioDef.pin;
+
+    
 }
 
 void
-systemRun (void)
+stm32IORead (IO_t IO)
+{
+#if defined(USE_HAL_DRIVER)
+
+#endif
+}
+
+void
+stm32IOWrite (IO_t IO)
+{
+#if defined(USE_HAL_DRIVER)
+
+#endif
+}
+
+void
+stm32IOHi (IO_t IO)
 {
 }
 
-static trSystemHandle_t g_trSystemHandle = {
-  .systemState = system_state_bootup,
-  .pSystemInit = systemInit,
-  .pSystemRun = systemRun,
-};
-
-trSystemHandle_t *
-trSystemHandle (void)
+void
+stm32IOLo (IO_t IO)
 {
-  return &g_trSystemHandle;
+}
+
+void
+stm32IOToggle (IO_t IO)
+{
 }

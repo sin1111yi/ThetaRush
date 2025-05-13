@@ -21,45 +21,51 @@
 
 #include <stdint.h>
 
-#include "impl/impl_platform.h"
-#include "impl/io/io_defs.h"
-
-#include "drivers/drv_defs.h"
+#include "drivers/dev_defs.h"
+#include "platform/pfm_defs.h"
+#include "utils/utils.h"
 
 #define IMPL_DISCARD_INTERFACE DEFAULT_NONE_INTERFACE
 
-#define DEV_BIND_RES(dev, res) ((uint32_t)(((dev) << 24) | (res)))
-#define BIND_GET_DEV(bind) ((uint32_t)((bind) & 0xff000000) >> 24)
-#define BIND_GET_RES(bind) ((uint32_t)((bind) & 0x00ffffff))
-
-#define IMPL_RES_IO(io) DEFIO_RES (io)
-#define IMPL_RES_IO_NONE DEFIO_RES__NONE
-
-typedef struct __implBinder_s
+enum __implRes_e
 {
-  trDev_t dev;
-  implRes_t res;
-} implBinder_t;
+  none,
+  outputIO,
+  inputIO,
+  resCount,
+};
 
-static inline implBinder_t
-implDevBindRes (trDev_t dev, implRes_t res)
+/**
+ * @brief Every tr device need a driver
+ *        Id of ThetaRush devices starts from 1
+ *
+ */
+
+#define IMPL_RES(res, id) CONTACT3 (resource__, res##_, id)
+#define IMPL_RES_ID_BASE(res) IMPL_RES (res, set, 1),
+#define IMPL_RES_NONE IMPL_RES (none, 0)
+#define IMPL_RES_COUNT(res) (IMPL_RES (res, n) - IMPL_RES (res, 1))
+
+#define IMPL_RES_IS(implRes, res)                                             \
+  ((implRes >= IMPL_RES (res, 1) && implRes <= IMPL_RES (res, n)) ? 1 : 0)
+
+typedef enum __implResource_e
 {
-  implBinder_t binder = {
-    .dev = dev,
-    .res = res,
-  };
+  IMPL_RES (none, 0) = 0,
 
-  return binder;
-}
+  IMPL_RES (outputIO, 1),
+  IMPL_RES (outputIO, n),
 
-static inline trDev_t
-implBindGetDev (implBinder_t binder)
+  IMPL_RES (inputIO, 1),
+  IMPL_RES (inputIO, n),
+
+  IMPL_RES (resCount, 0)
+
+} implResource_t;
+
+typedef struct __implClew_s
 {
-  return binder.dev;
-}
-
-static inline implRes_t
-implBindGetRes (implBinder_t binder)
-{
-  return binder.res;
-}
+  trDevice_t dev;          // device clew
+  implResource_t ires;     // impl resource
+  platfromResource_t pres; // platform resource
+} implClew_t;
