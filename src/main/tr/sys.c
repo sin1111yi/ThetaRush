@@ -17,11 +17,10 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "drivers/drv.h"
+
 #include "tr/sys.h"
 #include "tr/init.h"
-
-#include "drivers/drv.h"
-#include "drivers/drv_defs.h"
 
 void
 systemInit (void)

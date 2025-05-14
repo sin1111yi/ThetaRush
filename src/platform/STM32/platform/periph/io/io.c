@@ -21,44 +21,61 @@
 
 #include "platform/periph/io/io.h"
 #include "platform/periph/io/io_af.h"
-#include "platform/periph/io/io_res.h"
+#include "platform/platform.h"
+
+#define GPIO_BASE GPIOA_BASE
+#define GPIOX(x) ((uint32_t)(GPIO_BASE + ((x) << 12)))
+#define PIN(x) ((uint16_t)(1 << x))
+
+void
+stm32IOInit (ioRes_t ioRes)
+{
+  GPIO_TypeDef *gpiox = (GPIO_TypeDef *)(GPIOX (platformGetGpioPort (ioRes)));
+  uint16_t pin = PIN (platformGetGpioPin (ioRes));
+
+  GPIO_InitTypeDef GPIO_InitStruct = { 0 };
+
+  GPIO_InitStruct.Pin = pin;
+
+  if (platformGetMajorRes (ioRes) == PLATFORM_RES_MAJOR (M_OutputIO))
+    {
+      HAL_GPIO_WritePin (gpiox, pin, GPIO_PIN_RESET);
+      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+      GPIO_InitStruct.Pull = GPIO_NOPULL;
+      GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+    }
+
+    HAL_GPIO_Init(gpiox, &GPIO_InitStruct);
+}
 
 bool
-stm32IOInit (IO_t IO)
+stm32IORead (ioRes_t ioRes)
 {
-    GPIO_TypeDef* gpiox = (GPIO_TypeDef*)IO.ioDef.gpiox;
-    uint16_t pin = IO.ioDef.pin;
+  UNUSED (ioRes);
 
-    
+  return true;
 }
 
 void
-stm32IORead (IO_t IO)
+stm32IOWrite (ioRes_t ioRes)
 {
-#if defined(USE_HAL_DRIVER)
-
-#endif
+  UNUSED (ioRes);
 }
 
 void
-stm32IOWrite (IO_t IO)
+stm32IOHi (ioRes_t ioRes)
 {
-#if defined(USE_HAL_DRIVER)
-
-#endif
+  UNUSED (ioRes);
 }
 
 void
-stm32IOHi (IO_t IO)
+stm32IOLo (ioRes_t ioRes)
 {
+  UNUSED (ioRes);
 }
 
 void
-stm32IOLo (IO_t IO)
+stm32IOToggle (ioRes_t ioRes)
 {
-}
-
-void
-stm32IOToggle (IO_t IO)
-{
+  UNUSED (ioRes);
 }

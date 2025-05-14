@@ -17,40 +17,59 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "target.h"
+
 #include "drivers/light/led.h"
-#include "drivers/dev_defs.h"
 
 #include "impl/impl_defs.h"
 #include "impl/io/io_impl.h"
-
-#include "target.h"
 
 static drvLightLed_t devRunLeds[DRV_NUM_OF_RUN_LED];
 
 void
 drvLedInit (trDevice_t dev)
 {
-  drvLightLed_t *instance
-      = &devRunLeds[dev - DRV_DEVICE_ID_BASE (devRunLed)];
+  drvLightLed_t *instance = &devRunLeds[dev - DRV_DEVICE_ID_BASE (devRunLed)];
   instance->clew.dev = dev;
-  if (dev == TR_DEVICE (devRunLed, 1))
+  switch (dev)
     {
-        instance->clew.ires = RUN_LED_1_DRV_IMPL;
-        implIOInterfaceHandle()->pIOInit(instance->clew);
+#if defined(USING_RUN_LED_1)
+    case TR_DEVICE (devRunLed, 1):
+      instance->clew.ires = RUN_LED_1_DRV_IMPL;
+      break;
+#endif
+#if defined(USING_RUN_LED_2)
+    case TR_DEVICE (devRunLed, 2):
+      instance->clew.ires = RUN_LED_2_DRV_IMPL;
+      break;
+#endif
+#if defined(USING_RUN_LED_3)
+    case TR_DEVICE (devRunLed, 3):
+      instance->clew.ires = RUN_LED_3_DRV_IMPL;
+      break;
+#endif
+
+    default:
+      break;
     }
+  instance->clew.pres = 0x0000;
+  implIOInterfaceHandle ()->pIOInit (instance->clew);
 }
 
 void
 drvLedOn (trDevice_t dev)
 {
+  UNUSED (dev);
 }
 
 void
 drvLedOff (trDevice_t dev)
 {
+  UNUSED (dev);
 }
 
 void
 drvLedToggle (trDevice_t dev)
 {
+  UNUSED (dev);
 }

@@ -249,13 +249,13 @@ for k, io in ipairs(target.io) do
 	if io.set == tr.set.led then
 		outputIoNum = outputIoNum + 1
 		ioClew.device = io.owner
-		ioClew.impl = "IMPL_RES" .. "(outputIO, " .. outputIoNum .. ")"
-		ioClew.platformResource = "PLATFORM_RES" .. "__" .. "IO" .. "_OUTPUT_" .. outputIoNum
+		ioClew.impl = "IMPL_RES" .. "(" .. tr.impl.output_io .. ", " .. outputIoNum .. ")"
+		ioClew.platformResource = tr.impl.output_io .. "_" .. outputIoNum .. "__MAP__" .. "PLATFORM_RES"
 	elseif io.set == tr.set.key then
 		inputIoNum = inputIoNum + 1
 		ioClew.device = io.owner
-		ioClew.impl = "IMPL_RES" .. "(inputIO, " .. inputIoNum .. ")"
-		ioClew.platformResource = "PLATFORM_RES" .. "__" .. "IO" .. "_INPUT_" .. inputIoNum
+		ioClew.impl = "IMPL_RES" .. "(" .. tr.impl.input_io .. ", " ..  inputIoNum .. ")"
+		ioClew.platformResource = tr.impl.input_io .. "_" .. inputIoNum .. "__MAP__" .. "PLATFORM_RES"
 	end
 	chead.add_marco("USING_" .. ioClew.device, true)
 	chead.add_marco(io.owner .. "_" .. "DRV_IMPL", ioClew.impl)

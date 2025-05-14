@@ -21,51 +21,50 @@
 
 #include <stdint.h>
 
-#include "drivers/dev_defs.h"
-#include "platform/pfm_defs.h"
 #include "utils/utils.h"
 
+#include "platform/resource.h"
+
+#include "drivers/dev_defs.h"
+
 #define IMPL_DISCARD_INTERFACE DEFAULT_NONE_INTERFACE
-
-enum __implRes_e
-{
-  none,
-  outputIO,
-  inputIO,
-  resCount,
-};
-
+#define IMPL_MAP_PLATFORM_RES(impl, id) CONTACT3(impl, _##id, __MAP__PLATFORM_RES)
 /**
  * @brief Every tr device need a driver
  *        Id of ThetaRush devices starts from 1
  *
  */
 
-#define IMPL_RES(res, id) CONTACT3 (resource__, res##_, id)
+#define IMPL_RES(res, id) CONTACT3 (implResource__, res##_, id)
 #define IMPL_RES_ID_BASE(res) IMPL_RES (res, set, 1),
 #define IMPL_RES_NONE IMPL_RES (none, 0)
 #define IMPL_RES_COUNT(res) (IMPL_RES (res, n) - IMPL_RES (res, 1))
 
-#define IMPL_RES_IS(implRes, res)                                             \
-  ((implRes >= IMPL_RES (res, 1) && implRes <= IMPL_RES (res, n)) ? 1 : 0)
+enum __implRes_e
+{
+  IMPL_NONE,
+  IMPL_OUTPUT_IO,
+  IMPL_INPUT_IO,
+  IMPL_RES_COUNT,
+};
 
 typedef enum __implResource_e
 {
-  IMPL_RES (none, 0) = 0,
+  IMPL_RES (IMPL_NONE, 0) = 0,
 
-  IMPL_RES (outputIO, 1),
-  IMPL_RES (outputIO, n),
+  IMPL_RES (IMPL_OUTPUT_IO, 1),
+  IMPL_RES (IMPL_OUTPUT_IO, n),
 
-  IMPL_RES (inputIO, 1),
-  IMPL_RES (inputIO, n),
+  IMPL_RES (IMPL_INPUT_IO, 1),
+  IMPL_RES (IMPL_INPUT_IO, n),
 
-  IMPL_RES (resCount, 0)
+  IMPL_RES (IMPL_RES_COUNT, 0)
 
 } implResource_t;
 
-typedef struct __implClew_s
+typedef struct __clew_s
 {
   trDevice_t dev;          // device clew
   implResource_t ires;     // impl resource
-  platfromResource_t pres; // platform resource
-} implClew_t;
+  platformResource_t pres; // platform resource
+} clew_t;

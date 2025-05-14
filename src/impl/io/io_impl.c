@@ -20,70 +20,61 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "impl/impl_defs.h"
-#include "impl/impl_platform.h"
-#include "impl/io/io_defs.h"
-#include "impl/io/io_impl.h"
 #include "utils/utils.h"
 
+#include "impl/impl_defs.h"
+#include "impl/io/io_impl.h"
+
 #include "platform/periph/io/io.h"
+#include "platform/platform.h"
 
 static implIOInterface_t g_implIOInterface = { 0 };
 
 void
-implIOInit (implClew_t clew)
+implIOInit (clew_t clew)
 {
-#if defined(__PLATFORM_STM32__)
-
-#else
-  NOP;
-#endif
+  for (uint16_t i = 1; i < IMPL_RES_COUNT (IMPL_OUTPUT_IO); i++)
+    {
+      if (clew.ires == i)
+        {
+          P_RESIO(clew.pres, IMPL_MAP_PLATFORM_RES (IMPL_OUTPUT_IO, 1));
+          P_RES (clew.pres, M_OutputIO, m_IO1);
+          break;
+        }
+    }
+  stm32IOInit (clew.pres);
 }
 
 bool
-implIORead (implClew_t clew)
+implIORead (clew_t clew)
 {
-#if defined(__PLATFORM_STM32__)
-#else
-  NOP;
+  UNUSED (clew);
+
   return true;
-#endif
 }
 
 void
-implIOWrite (implClew_t clew)
+implIOWrite (clew_t clew)
 {
-#if defined(__PLATFORM_STM32__)
-#else
-  NOP;
-#endif
+  UNUSED (clew);
 }
 
 void
-implIOHi (implClew_t clew)
+implIOHi (clew_t clew)
 {
-#if defined(__PLATFORM_STM32__)
-#else
-  NOP;
-#endif
+  UNUSED (clew);
 }
 
 void
-implIOLo (implClew_t clew)
+implIOLo (clew_t clew)
 {
-#if defined(__PLATFORM_STM32__)
-#else
-  NOP;
-#endif
+  UNUSED (clew);
 }
 
 void
-implIOToggle (implClew_t clew)
+implIOToggle (clew_t clew)
 {
-#if defined(__PLATFORM_STM32__)
-#else
-  NOP;
-#endif
+  UNUSED (clew);
 }
 
 void

@@ -19,6 +19,11 @@
 
 local M = {}
 
+M.impl = {
+    output_io = "IMPL_OUTPUT_IO",
+    input_io = "IMPL_INPUT_IO",
+}
+
 M.set = {
     debug = {
         enable = true,

@@ -22,45 +22,26 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "impl/impl_defs.h"
 #include "utils/utils.h"
 
-// for platforms which IOs not defined in the way port with pin number
-typedef uint32_t IOTag_t;
-
-// for platform which IOs defined in the way port with pin number
-typedef struct IODef_s
-{
-  void *gpiox;
-  uint16_t pin;
-} IODef_t;
-
-// for platforms which IOs defined in their unique way
-typedef void *IOExt_t;
-
-typedef struct IO_s
-{
-  IODef_t ioDef;
-  IOTag_t ioTag;
-  IOExt_t extIO;
-} IO_t;
+#include "impl/impl_defs.h"
 
 typedef struct implIOInterface_s
 {
-  void (*pIOInit) (implClew_t clew);
-  bool (*pIORead) (implClew_t clew);
-  void (*pIOWrite) (implClew_t clew);
-  void (*pIOHi) (implClew_t clew);
-  void (*pIOLo) (implClew_t clew);
-  void (*pIOToggle) (implClew_t clew);
+  void (*pIOInit) (clew_t clew);
+  bool (*pIORead) (clew_t clew);
+  void (*pIOWrite) (clew_t clew);
+  void (*pIOHi) (clew_t clew);
+  void (*pIOLo) (clew_t clew);
+  void (*pIOToggle) (clew_t clew);
 } implIOInterface_t;
 
-void implIOInit (implClew_t clew);
-bool implIORead (implClew_t clew);
-void implIOWrite (implClew_t clew);
-void implIOHi (implClew_t clew);
-void implIOLo (implClew_t clew);
-void implIOToggle (implClew_t clew);
+void implIOInit (clew_t clew);
+bool implIORead (clew_t clew);
+void implIOWrite (clew_t clew);
+void implIOHi (clew_t clew);
+void implIOLo (clew_t clew);
+void implIOToggle (clew_t clew);
 
 void implIOInterfaceInit (void);
 implIOInterface_t *implIOInterfaceHandle (void);

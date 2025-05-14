@@ -22,23 +22,15 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "platform/periph/io/io_af.h"
+#include "platform/periph/io/io.h"
+
 #include "impl/impl_defs.h"
-#include "impl/impl_platform.h"
 #include "impl/io/io_impl.h"
 
-#include "platform/periph/io/io_af.h"
-#include "platform/platform.h"
-
-typedef struct __periphIO_s
-{
-  IO_t IO;
-  IOAF_T afio;
-  implRes_t ioRes;
-} periphIO_t;
-
-bool stm32IOInit (IO_t IO);
-void stm32IORead (IO_t IO);
-void stm32IOWrite (IO_t IO);
-void stm32IOHi (IO_t IO);
-void stm32IOLo (IO_t IO);
-void stm32IOToggle (IO_t IO);
+void stm32IOInit (ioRes_t ioRes);
+bool stm32IORead (ioRes_t ioRes);
+void stm32IOWrite (ioRes_t ioRes);
+void stm32IOHi (ioRes_t ioRes);
+void stm32IOLo (ioRes_t ioRes);
+void stm32IOToggle (ioRes_t ioRes);

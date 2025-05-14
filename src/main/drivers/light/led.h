@@ -21,13 +21,20 @@
 
 #include <stdint.h>
 
-#include "drivers/dev_defs.h"
 #include "impl/impl_defs.h"
-#include "impl/io/io_impl.h"
+
+#include "drivers/dev_defs.h"
+
+enum lightLedStat
+{
+  lightLedSta_On,
+  lightLedSta_Off,
+};
 
 typedef struct __drvLightLed_s
 {
-  implClew_t clew;
+  clew_t clew;
+  enum lightLedStat sta;
 } drvLightLed_t;
 
 void drvLedInit (trDevice_t dev);

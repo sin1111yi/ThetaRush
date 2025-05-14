@@ -20,7 +20,6 @@
 #pragma once
 
 #include "utils/utils.h"
-#include <stdint.h>
 
 #define DRV_NUM_OF_CLOCK 1
 #define DRV_NUM_OF_RUN_LED 3

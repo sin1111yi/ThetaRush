@@ -29,7 +29,6 @@
 #include "stm32h7xx.h"
 
 #if defined(STM32H750xx)
-
 #define MAX_MPU_REGIONS 16
 
 #endif /* STM32H750xx */

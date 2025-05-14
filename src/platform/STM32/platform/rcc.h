@@ -18,12 +18,3 @@
  */
 
 #pragma once
-
-#include "utils/utils.h"
-
-#define PLATFORM_RES(res, conf, id)                                           \
-  CONTACT4 (PLATFORM_RES__, res##_, conf##_, id)
-
-// use low 16 bits as resource identification
-// use high 16 bits as reource platfrom resource owner
-typedef uint32_t platfromResource_t;
