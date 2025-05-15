@@ -19,39 +19,9 @@
 
 cmake_minimum_required(VERSION 3.22)
 
-set(LIB_TARGET_DEF_INTERFACE libinterface_${TARGET}_defs)
-
-if(NOT EXISTS ${PROJECT_TARGET_CONFIG_PATH}/target.lua)
-    LOG_ERROR("Target defination file does not exist.")
-    return()
-endif()
-
-# clean old files before generate new files
-execute_process(
-    COMMAND lua target_config_gen.lua --clean ${TARGET}
-    WORKING_DIRECTORY ${PROJECT_TARGET_PATH}
-    RESULT_VARIABLE CLEAN_RESULT
-)
-
-# call target_config_gen.lua to generate target.h and target.lua
-execute_process(
-    COMMAND lua target_config_gen.lua --target ${TARGET}
-    WORKING_DIRECTORY ${PROJECT_TARGET_PATH}
-    RESULT_VARIABLE GEN_RESULT
-)
-
 if(NOT EXISTS ${PROJECT_TARGET_CONFIG_PATH}/target.h OR NOT EXISTS ${PROJECT_TARGET_CONFIG_PATH}/target.cmake)
-    LOG_ERROR("Run target/generate.lua with target ${PROJECT_TARGET} failed.")
+    LOG_ERROR("Didn't detect target config files for target ${PROJECT_TARGET}. Please run \"target_config_gen.lua\".")
     return()
-endif()
-
-include("${PROJECT_TARGET_CONFIG_PATH}/target.cmake")
-
-if(NOT DEFINED TARGET_MCU OR NOT DEFINED TARGET_MCU_SERIES OR NOT DEFINED TARGET_BUILD_TOOLCHAIN)
-    LOG_ERROR("Missing defination(s) in ${PROJECT_TARGET_CONFIG_PATH}/target.cmake.")
-    return()
-else()
-    LOG_INFO("Target mcu \"${TARGET_MCU}\" belong to series \"${TARGET_MCU_SERIES}\", using toolchain \"${TARGET_BUILD_TOOLCHAIN}\".")
 endif()
 
 if(${TARGET_MCU_SERIES} STREQUAL "STM32H7")
@@ -64,23 +34,8 @@ if(${TARGET_MCU_SERIES} STREQUAL "STM32H7")
     set(TARGET_MCU_PLATFORM STM32 CACHE INTERNAL "Target MCU Platform")
 endif()
 
-set(TARGET_PLATFORM_PATH
+set(PROJECT_TARGET_PLATFORM_PATH
     ${PROJECT_SOURCES_PATH}/platform/${TARGET_MCU_PLATFORM}
     CACHE INTERNAL
-    "Target Platform Path")
-
-set(TARGET_PLATFORM_SYSTEM_PATH
-    ${TARGET_PLATFORM_PATH}/platform/system/${TARGET_MCU_SERIES}xx
-    CACHE INTERNAL
-    "Target Platform System Path")
-
-LOG_INFO("Add Library ${LIB_TARGET_DEF_INTERFACE}")
-add_library(${LIB_TARGET_DEF_INTERFACE} INTERFACE)
-target_include_directories(${LIB_TARGET_DEF_INTERFACE}
-    INTERFACE
-    ${PROJECT_TARGET_CONFIG_PATH}
-)
-target_compile_definitions(${LIB_TARGET_DEF_INTERFACE}
-    INTERFACE
-    ${TAREGT_MCU_FLAGS}
+    "Target Platform Path"
 )

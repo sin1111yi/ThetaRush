@@ -16,3 +16,5 @@
  *
  * If not, see <https://www.gnu.org/licenses/>.
  */
+
+#include "platform/platform.h"

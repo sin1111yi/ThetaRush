@@ -48,10 +48,12 @@
  * @{
  */
 
-#include "stm32h7xx.h"
 #include <math.h>
 
 #include "target.h"
+
+#include "stm32h7xx.h"
+
 #include "platform/memprot.h"
 
 #if defined(STM32H750xx)
@@ -593,9 +595,11 @@ SystemInit (void)
   SystemClock_Config ();
   SystemCoreClockUpdate ();
 
-    // Configure MPU
+#if 0
+  // Configure MPU
 
   memProtConfigure(mpuRegions, mpuRegionCount);
+#endif
 
   // Enable CPU L1-Cache
   SCB_EnableICache ();

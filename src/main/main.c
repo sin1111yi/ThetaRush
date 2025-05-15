@@ -25,11 +25,8 @@
 #include "tr/sys.h"
 
 int
-main (int argc, char *argv[])
+main (void)
 {
-  UNUSED (argc);
-  UNUSED (argv);
-
   trSystemHandle ()->pSystemInit ();
   trSystemHandle ()->pSystemRun ();
 

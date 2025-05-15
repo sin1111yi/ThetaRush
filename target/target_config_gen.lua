@@ -264,6 +264,6 @@ end
 
 print(string.format(
 	[[
-	target_config_gen.lua finished, file generated at %s.]],
+target_config_gen.lua finished, file generated at %s.]],
 	config.target
 ))

@@ -19,7 +19,7 @@
 
 cmake_minimum_required(VERSION 3.22)
 
-include("cmake/utils.cmake") # import utils module
+include("cmake/debug.cmake")
 
 if(NOT DEFINED TARGET)
     LOG_ERROR("Undefined target.")
@@ -28,48 +28,46 @@ else()
     LOG_INFO("Target: ${TARGET}.")
 endif()
 
-set(PROJECT_TARGET ${TARGET})
-set(__PROJECT_NAME "TheRush_${TARGET}")
+set(PROJECT_TARGET      ${TARGET})
+set(PROJECT_NAME        ThetaRush_${PROJECT_TARGET})
 
-set(PROJECT_ROOT_PATH            ${CMAKE_SOURCE_DIR})
-set(PROJECT_SOURCES_PATH         ${PROJECT_ROOT_PATH}/src)
-set(PROJECT_LIBRARIES_PATH       ${PROJECT_ROOT_PATH}/libs)
-set(PROJECT_TARGET_PATH          ${PROJECT_ROOT_PATH}/target)
-set(PROJECT_TARGET_CONFIG_PATH   ${PROJECT_TARGET_PATH}/${PROJECT_TARGET})
+set(PROJECT_SOURCE_PATH         ${CMAKE_CURRENT_SOURCE_DIR})
+set(PROJECT_LIBRARIES_PATH      ${PROJECT_SOURCE_PATH}/libs)
+set(PROJECT_SOURCES_PATH        ${PROJECT_SOURCE_PATH}/src)
+set(PROJECT_TARGET_PATH         ${PROJECT_SOURCE_PATH}/target)
+set(PROJECT_TARGET_CONFIG_PATH  ${PROJECT_TARGET_PATH}/${PROJECT_TARGET})
 
 set(CMAKE_C_STANDARD                11)
 set(CMAKE_C_STANDARD_REQUIRED       ON)
 set(CMAKE_C_EXTENSIONS              ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS   ON)
-set(DISABLE_COMPILER_CONF           0)
 
 # Define the log level
-if (NOT LOG_LEVEL)
-    set(LOG_LEVEL INFO)
+if (NOT DEFINED LOG_LEVEL)
+    set(LOG_LEVEL DEBUG)
 endif()
 
 # Define the build type
-if(NOT CMAKE_BUILD_TYPE)
+if(NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
-#[[
-#   TODO: add envirnmont check, such as lua, arm-none-eabi-toolchain and so on
-#]]
+include("${PROJECT_TARGET_CONFIG_PATH}/target.cmake")
 
-if(NOT EXISTS ${PROJECT_TARGET_CONFIG_PATH})
-    LOG_ERROR("Target ${PROJECT_TARGET_CONFIG_PATH} was defined but does not exist.")
+if(NOT DEFINED TARGET_MCU OR NOT DEFINED TARGET_MCU_SERIES OR NOT DEFINED TARGET_BUILD_TOOLCHAIN)
+    LOG_ERROR("Missing defination(s) in ${PROJECT_TARGET_DIR}/target.cmake.")
     return()
+else()
+    LOG_INFO("Target mcu \"${TARGET_MCU}\" belong to series \"${TARGET_MCU_SERIES}\", using toolchain \"${TARGET_BUILD_TOOLCHAIN}\".")
 endif()
 
-add_subdirectory("target")
 include("toolchain/${TARGET_BUILD_TOOLCHAIN}.cmake") # compilers configurations
-include("${PROJECT_TARGET_CONFIG_PATH}/target.cmake") # get target configurations
 
-project(${__PROJECT_NAME} VERSION 0.1 LANGUAGES C ASM)
+project(${PROJECT_NAME} VERSION 0.1 LANGUAGES C ASM)
 
-add_executable(${CMAKE_PROJECT_NAME})
+add_executable(${PROJECT_NAME})
 
+add_subdirectory("target")
 add_subdirectory("libs")
 add_subdirectory("src")
 

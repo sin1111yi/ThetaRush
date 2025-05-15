@@ -1,7 +1,28 @@
+#[[
+# This file is a part of ThetaRush.
+#
+# ThetaRush is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ThetaRush is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.
+#
+# If not, see <https://www.gnu.org/licenses/>.
+]]
+
+cmake_minimum_required(VERSION 3.22)
+
 LOG_INFO("Begin to configure drivers library with target ${PROJECT_TARGET}.")
 
-set(TARGET_DRV_INTERFACE libinterface_${TARGET_MCU_SERIES}_drv CACHE INTERNAL "TARGET_DRV_INTERFACE")
-set(TARGET_DRV_LIBRARY libobject_${TARGET_MCU_SERIES}_drv CACHE INTERNAL "TARGET_DRV_LIBRARY")
+set(TARGET_DRV_INTERFACE libinterface_${TARGET_MCU_SERIES}_drv CACHE INTERNAL "Target Drivers Interface")
+set(TARGET_DRV_LIBRARY libobject_${TARGET_MCU_SERIES}_drv CACHE INTERNAL "Target Drivers Library")
 
 set(TARGET_DRIVERS_PATH ${PROJECT_LIBRARIES_PATH}/drivers)
 set(TARGET_CMSIS_PATH ${PROJECT_LIBRARIES_PATH}/drivers/CMSIS)
@@ -58,7 +79,8 @@ set(TARGET_DRIVER_SRC_PATH ${TARGET_DRIVER_PATH}/Src)
 LOG_INFO("Drivers' includes at \"${TARGET_DRIVER_INC_PATH}\", sources at \"${TARGET_DRIVER_SRC_PATH}\"")
 
 set(TARGET_DRV_INTERFACE_INC_PATH
-    ${TARGET_SYSTEM_INC_PATH}
+    ${PROJECT_TARGET_PLATFORM_PATH}/platform/system/${TARGET_MCU_SERIES}xx
+
     ${TARGET_DRIVER_INC_PATH}
     ${TARGET_DRIVER_LEGACY_INC_PATH}
     ${TARGET_CMSIS_DEVICE_INC_PATH}
@@ -70,7 +92,6 @@ add_library(${TARGET_DRV_INTERFACE} INTERFACE)
 target_include_directories(${TARGET_DRV_INTERFACE}
     INTERFACE
     ${TARGET_DRV_INTERFACE_INC_PATH}
-    ${TARGET_PLATFORM_SYSTEM_PATH}
 )
 target_compile_definitions(${TARGET_DRV_INTERFACE}
     INTERFACE

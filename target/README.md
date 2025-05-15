@@ -37,28 +37,3 @@ Forced item(s)
 Optional item(s)
 
 - None
-
-## 2. "How to Define an IO?"
-
-To define an IO by creating `M.io` in the specified format:
-
-```lua
-M.io = {
-    io1 = platform.setup(res.all.io, {
-        name = "GPIO_OUTPUT_PIN1",
-        io = res.io.PE3,
-        owner = nil
-    }),
-}
-```
-
-When declaring IO ports in the table, they must follow the `iox` naming convention, where x represents an integer value in the range **1 ≤ x ≤ 16**.
-
-Forced item(s)
-
-- `iox.name` is the name of current IO
-- `iox.io` is the io resource of platform, port in range **A to J**, pin in range **0 to 15**
-
-Optional item(s)
-
-- `iox.owner` is the owner of current io, default to `nil`. It won't work for now.

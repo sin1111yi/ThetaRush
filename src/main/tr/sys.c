@@ -19,8 +19,8 @@
 
 #include "drivers/drv.h"
 
-#include "tr/sys.h"
 #include "tr/init.h"
+#include "tr/sys.h"
 
 void
 systemInit (void)
@@ -31,6 +31,10 @@ systemInit (void)
 void
 systemRun (void)
 {
+  while (1)
+    {
+      ;
+    }
 }
 
 static trSystemHandle_t g_trSystemHandle = {
