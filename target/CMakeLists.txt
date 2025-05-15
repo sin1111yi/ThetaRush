@@ -28,6 +28,7 @@ if(${TARGET_MCU_SERIES} STREQUAL "STM32H7")
     set(TAREGT_MCU_FLAGS
         USE_PWR_LDO_SUPPLY
         USE_HAL_DRIVER
+        USE_FULL_LL_DRIVER
         ${TARGET_MCU}
         CACHE INTERNAL "Target mcu compile flags.")
     set(TARGET_MCU_VENDOR ST CACHE INTERNAL "Target MCU Vendor")
