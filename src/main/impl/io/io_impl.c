@@ -33,7 +33,7 @@ static implIOInterface_t g_implIOInterface = { 0 };
 void
 implIOInit (clew_t clew)
 {
-  for (uint16_t i = 1; i < IMPL_RES_COUNT (IMPL_OUTPUT_IO); i++)
+  for (uint16_t i = IMPL_RES (IMPL_OUTPUT_IO, 1); i < IMPL_RES (IMPL_OUTPUT_IO, n); i++)
     {
       if (clew.ires == i)
         {

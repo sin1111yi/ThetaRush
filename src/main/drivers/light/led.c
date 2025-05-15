@@ -52,7 +52,6 @@ drvLedInit (trDevice_t dev)
     default:
       break;
     }
-  instance->clew.pres = 0x0000;
   implIOInterfaceHandle ()->pIOInit (instance->clew);
 }
 

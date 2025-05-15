@@ -17,36 +17,12 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "drivers/drv.h"
-
 #include "tr/impl.h"
-#include "tr/init.h"
-#include "tr/sys.h"
+
+#include "impl/io/io_impl.h"
 
 void
-systemInit (void)
+trImplInit (void)
 {
-  trImplInit ();
-  trDrvInit ();
-}
-
-void
-systemRun (void)
-{
-  while (1)
-    {
-      ;
-    }
-}
-
-static trSystemHandle_t g_trSystemHandle = {
-  .systemState = system_state_bootup,
-  .pSystemInit = systemInit,
-  .pSystemRun = systemRun,
-};
-
-trSystemHandle_t *
-trSystemHandle (void)
-{
-  return &g_trSystemHandle;
+    implIOInterfaceInit();
 }

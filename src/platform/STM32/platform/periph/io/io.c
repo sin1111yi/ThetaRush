@@ -24,7 +24,7 @@
 #include "platform/platform.h"
 
 #define GPIO_BASE GPIOA_BASE
-#define GPIOX(x) ((uint32_t)(GPIO_BASE + ((x) << 12)))
+#define GPIOX(x) ((uint32_t)(GPIO_BASE + ((x) << 10)))
 #define PIN(x) ((uint16_t)(1 << x))
 
 void
