@@ -21,16 +21,25 @@
 
 #include "target.h"
 
-#if !defined(__PLATFORM_STM32__)
-#define __PLATFORM_STM32__
+#if !defined(RUNNING_PLATFORM_IS_STM32)
+#define RUNNING_PLATFORM_IS_STM32
 #endif
 
 #if defined(STM32H7)
 #include "stm32h7xx.h"
 
 #if defined(STM32H750xx)
+
 #define MAX_MPU_REGIONS 16
 
 #endif /* STM32H750xx */
 
 #endif /* STM32H7 */
+
+void platformSystemClockConfig(void);
+
+void platformErrorHandler(void);
+
+#ifdef USE_FULL_ASSERT
+void assert_failed(uint8_t *file, uint32_t line);
+#endif /* USE_FULL_ASSERT */

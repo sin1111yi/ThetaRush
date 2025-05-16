@@ -40,10 +40,12 @@ M.set = {
         disable_tx = "DISABLE_TX",
         disable_rx = "DISABLE_RX",
         regular = "REGULAR"
-    }
+    },
 }
 
 M.drv = {
+    clock = "SYSCLK",
+
     led = {
         run_led = {
             "RUN_LED_1",
@@ -90,7 +92,7 @@ M.drv = {
 
     flash = {
         w25qxx = "W25QXX"
-    }
+    },
 }
 
 return M

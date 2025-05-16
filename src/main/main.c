@@ -27,7 +27,9 @@
 int
 main (void)
 {
+
   trSystemHandle ()->pSystemInit ();
+
   trSystemHandle ()->pSystemRun ();
 
   return 0;

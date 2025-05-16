@@ -87,4 +87,6 @@ M.bus = {
     }
 }
 
+M.clock = "TIMER1"
+
 return M
