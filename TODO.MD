@@ -14,4 +14,6 @@ This is TODO List of ThetaRush.
 
 ## Lv. Normal
 
+- Write documents
+
 ## Lv. Dispensable
