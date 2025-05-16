@@ -144,7 +144,3 @@ SysTick_Handler (void)
 /* For the available peripheral interrupt handler names, */
 /* please refer to the startup file (startup_stm32h7xx.s). */
 /******************************************************************************/
-
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
