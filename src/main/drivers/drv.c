@@ -27,7 +27,7 @@ drvInterface_t g_drvInterface = {
 };
 
 drvInterface_t *
-drvInterfaceHandler (void)
+drvInterfaceHandle (void)
 {
   return &g_drvInterface;
 }

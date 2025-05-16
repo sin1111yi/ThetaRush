@@ -30,4 +30,4 @@ typedef struct __drvInterface_s
   void (*pLedToggle) (trDevice_t dev);
 } drvInterface_t;
 
-drvInterface_t *drvInterfaceHandler (void);
+drvInterface_t *drvInterfaceHandle (void);
