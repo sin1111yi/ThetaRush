@@ -26,55 +26,54 @@
 #include "impl/io/io_impl.h"
 
 #include "platform/periph/io/io.h"
-#include "platform/platform.h"
 
 static implIOInterface_t g_implIOInterface = { 0 };
 
 void
-implIOInit (clew_t clew)
+implIOInit (trArrow_t arrow)
 {
   for (uint16_t i = IMPL_RES (IMPL_OUTPUT_IO, 1); i < IMPL_RES (IMPL_OUTPUT_IO, n); i++)
     {
-      if (clew.ires == i)
+      if (arrow.ires == i)
         {
-          P_RESIO(clew.pres, IMPL_MAP_PLATFORM_RES (IMPL_OUTPUT_IO, 1));
-          P_RES (clew.pres, M_OutputIO, m_IO1);
+          P_RESIO(arrow.pres, IMPL_MAP_PLATFORM_RES (IMPL_OUTPUT_IO, 1));
+          P_RES (arrow.pres, M_OutputIO, m_IO1);
           break;
         }
     }
-  stm32IOInit (clew.pres);
+  stm32IOInit (arrow.pres);
 }
 
 bool
-implIORead (clew_t clew)
+implIORead (trArrow_t arrow)
 {
-  UNUSED (clew);
+  UNUSED (arrow);
 
   return true;
 }
 
 void
-implIOWrite (clew_t clew)
+implIOWrite (trArrow_t arrow)
 {
-  UNUSED (clew);
+  UNUSED (arrow);
 }
 
 void
-implIOHi (clew_t clew)
+implIOHi (trArrow_t arrow)
 {
-  UNUSED (clew);
+  UNUSED (arrow);
 }
 
 void
-implIOLo (clew_t clew)
+implIOLo (trArrow_t arrow)
 {
-  UNUSED (clew);
+  UNUSED (arrow);
 }
 
 void
-implIOToggle (clew_t clew)
+implIOToggle (trArrow_t arrow)
 {
-  UNUSED (clew);
+  UNUSED (arrow);
 }
 
 void

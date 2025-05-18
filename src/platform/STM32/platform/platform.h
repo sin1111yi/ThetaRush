@@ -36,10 +36,10 @@
 
 #endif /* STM32H7 */
 
-void platformSystemClockConfig(void);
+void platformSystemClockConfig (void);
 
-void platformErrorHandler(void);
+void platformErrorHandler (void);
 
 #ifdef USE_FULL_ASSERT
-void assert_failed(uint8_t *file, uint32_t line);
+void assert_failed (uint8_t *file, uint32_t line);
 #endif /* USE_FULL_ASSERT */

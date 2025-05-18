@@ -25,16 +25,16 @@
 
 #include "drivers/dev_defs.h"
 
-enum lightLedStat
+typedef enum __drvLightLedState_e
 {
   lightLedSta_On,
   lightLedSta_Off,
-};
+} drvLightLedState_t;
 
 typedef struct __drvLightLed_s
 {
-  clew_t clew;
-  enum lightLedStat sta;
+  trArrow_t arrow;
+  drvLightLedState_t sta;
 } drvLightLed_t;
 
 void drvLedInit (trDevice_t dev);

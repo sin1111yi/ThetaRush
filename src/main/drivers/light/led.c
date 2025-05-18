@@ -30,29 +30,29 @@ void
 drvLedInit (trDevice_t dev)
 {
   drvLightLed_t *instance = &devRunLeds[dev - DRV_DEVICE_ID_BASE (devRunLed)];
-  instance->clew.dev = dev;
+  instance->arrow.dev = dev;
   switch (dev)
     {
 #if defined(USING_RUN_LED_1)
     case TR_DEVICE (devRunLed, 1):
-      instance->clew.ires = RUN_LED_1_DRV_IMPL;
+      instance->arrow.ires = RUN_LED_1_DRV_IMPL;
       break;
 #endif
 #if defined(USING_RUN_LED_2)
     case TR_DEVICE (devRunLed, 2):
-      instance->clew.ires = RUN_LED_2_DRV_IMPL;
+      instance->arrow.ires = RUN_LED_2_DRV_IMPL;
       break;
 #endif
 #if defined(USING_RUN_LED_3)
     case TR_DEVICE (devRunLed, 3):
-      instance->clew.ires = RUN_LED_3_DRV_IMPL;
+      instance->arrow.ires = RUN_LED_3_DRV_IMPL;
       break;
 #endif
 
     default:
       break;
     }
-  implIOInterfaceHandle ()->pIOInit (instance->clew);
+  implIOInterfaceHandle ()->pIOInit (instance->arrow);
 }
 
 void

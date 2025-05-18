@@ -241,25 +241,25 @@ local outputIoNum = 0
 local inputIoNum = 0
 
 for k, io in ipairs(target.io) do
-	local ioClew = {
+	local ioArrow = {
 		device = nil,
 		implResource = nil,
 		platformResource = nil
 	}
 	if io.set == tr.set.led then
 		outputIoNum = outputIoNum + 1
-		ioClew.device = io.owner
-		ioClew.impl = "IMPL_RES" .. "(" .. tr.impl.output_io .. ", " .. outputIoNum .. ")"
-		ioClew.platformResource = tr.impl.output_io .. "_" .. outputIoNum .. "__MAP__" .. "PLATFORM_RES"
+		ioArrow.device = io.owner
+		ioArrow.impl = "IMPL_RES" .. "(" .. tr.impl.output_io .. ", " .. outputIoNum .. ")"
+		ioArrow.platformResource = tr.impl.output_io .. "_" .. outputIoNum .. "__MAP__" .. "PLATFORM_RES"
 	elseif io.set == tr.set.key then
 		inputIoNum = inputIoNum + 1
-		ioClew.device = io.owner
-		ioClew.impl = "IMPL_RES" .. "(" .. tr.impl.input_io .. ", " ..  inputIoNum .. ")"
-		ioClew.platformResource = tr.impl.input_io .. "_" .. inputIoNum .. "__MAP__" .. "PLATFORM_RES"
+		ioArrow.device = io.owner
+		ioArrow.impl = "IMPL_RES" .. "(" .. tr.impl.input_io .. ", " ..  inputIoNum .. ")"
+		ioArrow.platformResource = tr.impl.input_io .. "_" .. inputIoNum .. "__MAP__" .. "PLATFORM_RES"
 	end
-	chead.add_marco("USING_" .. ioClew.device, true)
-	chead.add_marco(io.owner .. "_" .. "DRV_IMPL", ioClew.impl)
-	chead.add_marco(ioClew.platformResource, io.source)
+	chead.add_marco("USING_" .. ioArrow.device, true)
+	chead.add_marco(io.owner .. "_" .. "DRV_IMPL", ioArrow.impl)
+	chead.add_marco(ioArrow.platformResource, io.source)
 end
 
 print(string.format(

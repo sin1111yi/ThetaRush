@@ -28,20 +28,20 @@
 
 typedef struct implIOInterface_s
 {
-  void (*pIOInit) (clew_t clew);
-  bool (*pIORead) (clew_t clew);
-  void (*pIOWrite) (clew_t clew);
-  void (*pIOHi) (clew_t clew);
-  void (*pIOLo) (clew_t clew);
-  void (*pIOToggle) (clew_t clew);
+  void (*pIOInit) (trArrow_t arrow);
+  bool (*pIORead) (trArrow_t arrow);
+  void (*pIOWrite) (trArrow_t arrow);
+  void (*pIOHi) (trArrow_t arrow);
+  void (*pIOLo) (trArrow_t arrow);
+  void (*pIOToggle) (trArrow_t arrow);
 } implIOInterface_t;
 
-void implIOInit (clew_t clew);
-bool implIORead (clew_t clew);
-void implIOWrite (clew_t clew);
-void implIOHi (clew_t clew);
-void implIOLo (clew_t clew);
-void implIOToggle (clew_t clew);
+void implIOInit (trArrow_t arrow);
+bool implIORead (trArrow_t arrow);
+void implIOWrite (trArrow_t arrow);
+void implIOHi (trArrow_t arrow);
+void implIOLo (trArrow_t arrow);
+void implIOToggle (trArrow_t arrow);
 
 void implIOInterfaceInit (void);
 implIOInterface_t *implIOInterfaceHandle (void);

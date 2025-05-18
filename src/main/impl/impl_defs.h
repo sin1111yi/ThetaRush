@@ -62,9 +62,9 @@ typedef enum __implResource_e
 
 } implResource_t;
 
-typedef struct __clew_s
+typedef struct __trArrow_s
 {
-  trDevice_t dev;          // device clew
+  trDevice_t dev;          // device arrow
   implResource_t ires;     // impl resource
   platformResource_t pres; // platform resource
-} clew_t;
+} trArrow_t;

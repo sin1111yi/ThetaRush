@@ -37,12 +37,6 @@ stm32IOInit (ioRes_t ioRes)
 
   GPIO_InitStruct.Pin = pin;
 
-  __HAL_RCC_GPIOE_CLK_ENABLE ();
-  __HAL_RCC_GPIOC_CLK_ENABLE ();
-  __HAL_RCC_GPIOH_CLK_ENABLE ();
-  __HAL_RCC_GPIOB_CLK_ENABLE ();
-  __HAL_RCC_GPIOA_CLK_ENABLE ();
-
   if (platformGetMajorRes (ioRes) == PLATFORM_RES_MAJOR (M_OutputIO))
     {
       HAL_GPIO_WritePin (gpiox, pin, GPIO_PIN_RESET);
@@ -51,7 +45,7 @@ stm32IOInit (ioRes_t ioRes)
       GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     }
 
-    HAL_GPIO_Init(gpiox, &GPIO_InitStruct);
+  HAL_GPIO_Init (gpiox, &GPIO_InitStruct);
 }
 
 bool
