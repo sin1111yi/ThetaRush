@@ -19,19 +19,16 @@
 
 #include "stm32h7xx.h"
 
+#include "impl/resource.h"
+
 #include "platform/periph/io/io.h"
 #include "platform/periph/io/io_af.h"
-#include "platform/platform.h"
-
-#define GPIO_BASE GPIOA_BASE
-#define GPIOX(x) ((uint32_t)(GPIO_BASE + ((x) << 10)))
-#define PIN(x) ((uint16_t)(1 << x))
 
 void
 stm32IOInit (ioRes_t ioRes)
 {
-  GPIO_TypeDef *gpiox = (GPIO_TypeDef *)(GPIOX (platformGetGpioPort (ioRes)));
-  uint16_t pin = PIN (platformGetGpioPin (ioRes));
+  GPIO_TypeDef *gpiox = (GPIO_TypeDef *)(__GPIOX (platformGetGpioPort (ioRes)));
+  uint16_t pin = __PIN (platformGetGpioPin (ioRes));
 
   GPIO_InitTypeDef GPIO_InitStruct = { 0 };
 

@@ -46,7 +46,7 @@ typedef struct __trLLNode_s
 typedef trLLNode_t trLL_t;
 
 #if !defined(TR_LL_HEAP_SIZE)
-#define TR_LL_HEAP_SIZE (128)
+#define TR_LL_HEAP_SIZE (512) /**< Default size of memory pool */
 #define __TR_LL_GUARD_SIZE ((TR_LL_HEAP_SIZE + 31) / 32)
 #endif
 

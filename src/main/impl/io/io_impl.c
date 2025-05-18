@@ -27,21 +27,34 @@
 
 #include "platform/periph/io/io.h"
 
+#include "tr/ds/ll.h"
+
 static implIOInterface_t g_implIOInterface = { 0 };
 
 void
 implIOInit (trArrow_t arrow)
 {
-  for (uint16_t i = IMPL_RES (IMPL_OUTPUT_IO, 1); i < IMPL_RES (IMPL_OUTPUT_IO, n); i++)
+  uint8_t isInputIO = 0;
+  switch (arrow.ires)
     {
-      if (arrow.ires == i)
-        {
-          P_RESIO(arrow.pres, IMPL_MAP_PLATFORM_RES (IMPL_OUTPUT_IO, 1));
-          P_RES (arrow.pres, M_OutputIO, m_IO1);
-          break;
-        }
+#define _implIoCaseOutputIO(k)                                                \
+  case IMPL_RES (IMPL_OUTPUT_IO, k):                                          \
+    PG_RESIO (arrow.pres, IMPL_MAP_PLATFORM_RES (IMPL_OUTPUT_IO, k));         \
+    PG_RES (arrow.pres, M_OutputIO, m_IO##k);                                 \
+    break;
+
+      _implIoCaseOutputIO (1);
+
+    default:
+      break;
     }
-  stm32IOInit (arrow.pres);
+
+#if defined(RUNNING_PLATFORM_IS_STM32)
+  if (!isInputIO)
+    stm32IOInit (arrow.pres);
+  else
+    stm32IOInitExti (arrow.pres, NULL);
+#endif
 }
 
 bool

@@ -23,9 +23,10 @@
 
 #include "utils/utils.h"
 
-#include "platform/resource.h"
-
 #include "drivers/dev_defs.h"
+
+#include "impl/resource.h"
+
 
 #define IMPL_DISCARD_INTERFACE DEFAULT_NONE_INTERFACE
 #define IMPL_MAP_PLATFORM_RES(impl, id) CONTACT3(impl, _##id, __MAP__PLATFORM_RES)

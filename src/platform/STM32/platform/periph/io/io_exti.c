@@ -17,29 +17,13 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
-
-#include <stdbool.h>
-#include <stdint.h>
-
-#include "stm32h7xx.h"
+#include "platform/periph/io/io.h"
 
 #include "impl/resource.h"
 
-#include "platform/periph/io/io_af.h"
+void stm32IOInitExti(ioRes_t ioRes, void(*callback)(void))
+{
+    UNUSED(ioRes);
+    UNUSED(callback);
+}
 
-
-#ifdef STM32H7
-#define __GPIO_BASE D3_AHB1PERIPH_BASE
-#endif
-#define __GPIOX(x) ((uint32_t)(__GPIO_BASE + ((x) << 10)))
-#define __PIN(x) ((uint16_t)(1 << x))
-
-void stm32IOInit (ioRes_t ioRes);
-bool stm32IORead (ioRes_t ioRes);
-void stm32IOWrite (ioRes_t ioRes);
-void stm32IOHi (ioRes_t ioRes);
-void stm32IOLo (ioRes_t ioRes);
-void stm32IOToggle (ioRes_t ioRes);
-
-void stm32IOInitExti (ioRes_t ioRes, void (*callback) (void));

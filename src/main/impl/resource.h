@@ -23,7 +23,7 @@
 
 #include "platform/periph/io/io_defs.h"
 
-#define DEFIO_TAG__(pinid) CONTACT (DEFIO_TAG__, pinid)
+#define DEFIO_TAG__(pinid) CONTACT (DEFIO_TAG_E__, pinid)
 #define DEFIO_TAG(port, pin) ((uint16_t)((DEF_GPIO##port) << 4 | pin))
 
 /**
@@ -34,9 +34,9 @@
  *              e.g. PC13 has GPIOC -> 0b 00 1100
  *        [8:11] Platform Source Minor Part
  *              e.g. PE3 is output IO 1 -> 0xb0001 for 1
- *                   PE9 is TIM1 Channel 1 -> 0b0001 for channel 1
+ *                   PE9 is timer1 Channel 1 -> 0b0001 for channel 1
  *        [12:15] Platform Source Major Part
- *              e.g. PE9 is TIM1 Channel 1 -> M_resTIM
+ *              e.g. PE9 is timer1 Channel 1 -> M_resTIM
  *
  *
  */
@@ -68,6 +68,8 @@ enum __majorPlatfromRes_e
   M_InputIO,
 
   M_UART1,
+
+  M_TIMER1,
 
   M_resCount,
 };

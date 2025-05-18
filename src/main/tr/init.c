@@ -21,11 +21,15 @@
 
 #include "drivers/drv.h"
 
+#include "tr/ds/init.h"
+
 #include "tr/init.h"
 
 void
 trDrvInit (void)
 {
+  trDsInit();
+
 #if defined(USING_RUN_LED_1)
   drvInterfaceHandle ()->pLedInit (TR_DEVICE (devRunLed, 1));
 #endif
