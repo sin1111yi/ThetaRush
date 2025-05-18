@@ -31,6 +31,7 @@ enum __device_e
   devRunLed,
   devLed,
   devLedStrip,
+  devKey,
   devImu,
   devCompass,
   devBarometer,
@@ -41,7 +42,6 @@ enum __device_e
 /**
  * @brief Every tr device need a driver
  *        Id of ThetaRush devices starts from 1
- *
  */
 
 #define TR_DEVICE(dev, id) CONTACT3 (trDevice_, dev##_, id)
@@ -49,6 +49,19 @@ enum __device_e
 #define DRV_DEVICE_NONE TR_DEVICE (devNone, 1)
 #define DRV_DEVICE_ID_BASE(dev) TR_DEVICE (dev, 1)
 #define DRV_DEVICE_COUNT(dev) (TR_DEVICE (dev, n) - TR_DEVICE (dev, 1))
+
+#define TR_PRIORITY(dev) CONTACT (trDevicePriority_, dev)
+
+enum __trDevicePriority_e
+{
+  TR_PRIORITY(AMAZING_HIGH) = 0,
+
+  TR_PRIORITY(VERY_HIGH) = 8,
+  TR_PRIORITY(HIGH),
+  TR_PRIORITY(NORMAL),
+  TR_PRIORITY(LOW),
+  TR_PRIORITY(VERY_LOW),
+};
 
 typedef enum __trDevice_e
 {
@@ -64,6 +77,8 @@ typedef enum __trDevice_e
 
   TR_DEVICE (devLed, 1),
   TR_DEVICE (devLed, n),
+
+  TR_DEVICE (devKey, n),
 
   TR_DEVICE (devCount, 0)
 } trDevice_t;
