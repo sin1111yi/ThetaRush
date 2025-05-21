@@ -66,7 +66,7 @@ typedef struct __trLLModule_s
 
   trLL_t *(*create) (void);                       /**< Create new list */
   void (*destroy) (trLL_t **);                    /**< Destroy entire list */
-  int (*pushBack) (trLL_t *, void *,  uint32_t *); /**< Add node to list tail */
+  int (*pushBack) (trLL_t *, void *, uint32_t *); /**< Add node to list tail */
   trLLNode_t *(*find) (trLL_t *, uint32_t);       /**< Find node by ID */
   int (*popNode) (trLL_t *, uint32_t);            /**< Remove node by ID */
   uint32_t (*getLength) (trLL_t *); /**< Get linear list length */

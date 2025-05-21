@@ -262,7 +262,8 @@ trLLGetLength (trLL_t *head)
 /**
  * @brief Get list length with direction control
  * @param[in] head List handle
- * @param[in] dir Traversal direction (unused for linear list, reserved for future)
+ * @param[in] dir Traversal direction (unused for linear list, reserved for
+ * future)
  * @return uint32_t Number of data nodes, 0 for invalid list
  */
 uint32_t
