@@ -342,11 +342,6 @@ SystemInit (void)
 #endif /* USER_VECT_TAB_ADDRESS */
 
 #endif /*DUAL_CORE && CORE_CM4*/
-
-// #ifdef USE_HAL_DRIVER
-//   HAL_Init ();
-// #endif
-
 }
 
 /**
