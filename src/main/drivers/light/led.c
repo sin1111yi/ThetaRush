@@ -26,11 +26,12 @@
 
 static drvLightLed_t devRunLeds[DRV_NUM_OF_RUN_LED];
 
-void
-drvLedInit (trDevice_t dev)
+static drvLightLed_t *
+__drvLedGetInstance (trDevice_t dev)
 {
-  drvLightLed_t *instance = &devRunLeds[dev - DRV_DEVICE_ID_BASE (devRunLed)];
+  drvLightLed_t *instance = &devRunLeds[dev - DRV_DEVICE_COUNT (devRunLed)];
   instance->arrow.dev = dev;
+
   switch (dev)
     {
 #if defined(USING_RUN_LED_1)
@@ -48,27 +49,45 @@ drvLedInit (trDevice_t dev)
       instance->arrow.ires = RUN_LED_3_DRV_IMPL;
       break;
 #endif
-
     default:
       break;
     }
+
+  return instance;
+}
+
+void
+drvLedInit (trDevice_t dev)
+{
+  drvLightLed_t *instance = __drvLedGetInstance (dev);
   implIOInterfaceHandle ()->pIOInit (instance->arrow);
 }
 
 void
 drvLedOn (trDevice_t dev)
 {
-  UNUSED (dev);
+  drvLightLed_t *instance = __drvLedGetInstance (dev);
+#if (!defined(LED_DRIVER_MODE) || LED_DRIVER_MODE == 0)
+  implIOInterfaceHandle ()->pIOWrite (instance->arrow, IMPL_IO_STAT_LOW);
+#else
+  implIOInterfaceHandle ()->pIOWrite (instance->arrow, IMPL_IO_STAT_HIGH);
+#endif
 }
 
 void
 drvLedOff (trDevice_t dev)
 {
-  UNUSED (dev);
+  drvLightLed_t *instance = __drvLedGetInstance (dev);
+#if (!defined(LED_DRIVER_MODE) || LED_DRIVER_MODE == 0)
+  implIOInterfaceHandle ()->pIOWrite (instance->arrow, IMPL_IO_STAT_HIGH);
+#else
+  implIOInterfaceHandle ()->pIOWrite (instance->arrow, IMPL_IO_STAT_LOW);
+#endif
 }
 
 void
 drvLedToggle (trDevice_t dev)
 {
-  UNUSED (dev);
+  drvLightLed_t *instance = __drvLedGetInstance (dev);
+  implIOInterfaceHandle ()->pIOToggle (instance->arrow);
 }

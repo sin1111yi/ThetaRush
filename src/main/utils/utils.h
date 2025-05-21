@@ -1,3 +1,23 @@
+/**
+ * This file is part of Cleanflight, Betaflight and ThetaRush.
+ *
+ * Cleanflight, Betaflight and ThetaRush are free software. You can
+ * redistribute this software and/or modify this software under the
+ * terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * Cleanflight, Betaflight and ThetaRush are distributed in the hope that
+ * they will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this software.
+ *
+ * If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #pragma once
 
 #include <math.h>
@@ -94,6 +114,21 @@ swapI16 (int16_t x)
 {
   return ((((uint16_t)x & 0x00ffU) << 8) | (((uint16_t)x & 0xff00U) >> 8));
 }
+
+/*
+ * https://groups.google.com/forum/?hl=en#!msg/comp.lang.c/attFnqwhvGk/sGBKXvIkY3AJ
+ * Return (v ? floor(log2(v)) : 0) when 0 <= v < 1<<[8, 16, 32, 64].
+ * Inefficient algorithm, intended for compile-time constants.
+ */
+#define LOG2_8BIT(v) (8 - 90 / (((v) / 4 + 14) | 1) - 2 / ((v) / 2 + 1))
+#define LOG2_16BIT(v) (8 * ((v) > 255) + LOG2_8BIT ((v) >> 8 * ((v) > 255)))
+#define LOG2_32BIT(v)                                                         \
+  (16 * ((v) > 65535L) + LOG2_16BIT ((v) * 1L >> 16 * ((v) > 65535L)))
+#define LOG2_64BIT(v)                                                         \
+  (32 * ((v) / 2L >> 31 > 0)                                                  \
+   + LOG2_32BIT ((v) * 1L >> 16 * ((v) / 2L >> 31 > 0)                        \
+                 >> 16 * ((v) / 2L >> 31 > 0)))
+#define LOG2(v) LOG2_64BIT (v)
 
 #if __GNUC__ > 6
 #define FALLTHROUGH                                                           \

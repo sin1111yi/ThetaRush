@@ -19,4 +19,4 @@
 
 #pragma once
 
-void trDsInit(void);
+void trDsInit (void);

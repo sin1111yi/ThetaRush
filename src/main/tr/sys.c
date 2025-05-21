@@ -25,6 +25,8 @@
 
 #include "stm32h7xx.h"
 
+#include "drivers/light/led.h"
+
 void
 systemInit (void)
 {
@@ -37,7 +39,7 @@ systemRun (void)
 {
   while (1)
     {
-      HAL_GPIO_TogglePin (GPIOE, GPIO_PIN_3);
+      drvLedOff(TR_DEVICE (devRunLed, 1));
       HAL_Delay (200);
     }
 }

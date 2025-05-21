@@ -26,11 +26,17 @@
 
 #include "impl/impl_defs.h"
 
+typedef enum __implIOStat_e
+{
+  IMPL_IO_STAT_LOW = 0,
+  IMPL_IO_STAT_HIGH
+} implIOStat_t;
+
 typedef struct implIOInterface_s
 {
   void (*pIOInit) (trArrow_t arrow);
   bool (*pIORead) (trArrow_t arrow);
-  void (*pIOWrite) (trArrow_t arrow);
+  void (*pIOWrite) (trArrow_t arrow, implIOStat_t sta);
   void (*pIOHi) (trArrow_t arrow);
   void (*pIOLo) (trArrow_t arrow);
   void (*pIOToggle) (trArrow_t arrow);
@@ -38,7 +44,7 @@ typedef struct implIOInterface_s
 
 void implIOInit (trArrow_t arrow);
 bool implIORead (trArrow_t arrow);
-void implIOWrite (trArrow_t arrow);
+void implIOWrite (trArrow_t arrow, implIOStat_t sta);
 void implIOHi (trArrow_t arrow);
 void implIOLo (trArrow_t arrow);
 void implIOToggle (trArrow_t arrow);

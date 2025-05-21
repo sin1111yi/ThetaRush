@@ -21,7 +21,8 @@
 
 #include "tr/ds/init.h"
 
-void trDsInit(void)
+void
+trDsInit (void)
 {
-    trLLInterfaceInit();
+  trLLInterfaceInit ();
 }

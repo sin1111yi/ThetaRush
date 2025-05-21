@@ -1,13 +1,13 @@
 /**
  * This file is part of Cleanflight, Betaflight and ThetaRush.
  *
- * Cleanflight, Betaflight and ThetaRush are free software. You can 
- * redistribute this software and/or modify this software under the 
- * terms of the GNU General Public License as published by the Free 
+ * Cleanflight, Betaflight and ThetaRush are free software. You can
+ * redistribute this software and/or modify this software under the
+ * terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  *
- * Cleanflight, Betaflight and ThetaRush are distributed in the hope that 
+ * Cleanflight, Betaflight and ThetaRush are distributed in the hope that
  * they will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
@@ -22,19 +22,20 @@
 
 #include <stdint.h>
 
-typedef struct mpuRegion_s {
-    uint32_t start;
-    uint32_t end;        // Zero if determined by size member (MPU_REGION_SIZE_xxx)
-    uint8_t  size;       // Zero if determined from linker symbols
-    uint8_t  perm;
-    uint8_t  exec;
-    uint8_t  shareable;
-    uint8_t  cacheable;
-    uint8_t  bufferable;
+typedef struct mpuRegion_s
+{
+  uint32_t start;
+  uint32_t end; // Zero if determined by size member (MPU_REGION_SIZE_xxx)
+  uint8_t size; // Zero if determined from linker symbols
+  uint8_t perm;
+  uint8_t exec;
+  uint8_t shareable;
+  uint8_t cacheable;
+  uint8_t bufferable;
 } mpuRegion_t;
 
 extern mpuRegion_t mpuRegions[];
 extern unsigned mpuRegionCount;
 
-void memProtReset(void);
-void memProtConfigure(mpuRegion_t *mpuRegions, unsigned regionCount);
+void memProtReset (void);
+void memProtConfigure (mpuRegion_t *mpuRegions, unsigned regionCount);

@@ -19,4 +19,4 @@
 
 #pragma once
 
-void trImplInit(void);
+void trImplInit (void);

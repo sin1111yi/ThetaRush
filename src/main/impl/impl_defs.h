@@ -27,9 +27,9 @@
 
 #include "impl/resource.h"
 
-
 #define IMPL_DISCARD_INTERFACE DEFAULT_NONE_INTERFACE
-#define IMPL_MAP_PLATFORM_RES(impl, id) CONTACT3(impl, _##id, __MAP__PLATFORM_RES)
+#define IMPL_MAP_PLATFORM_RES(impl, id)                                       \
+  CONTACT3 (impl, _##id, __MAP__PLATFORM_RES)
 /**
  * @brief Every tr device need a driver
  *        Id of ThetaRush devices starts from 1

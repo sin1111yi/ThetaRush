@@ -25,19 +25,19 @@
 #include "stm32h7xx.h"
 
 #include "impl/resource.h"
+#include "impl/io/io_impl.h"
 
 #include "platform/periph/io/io_af.h"
-
 
 #ifdef STM32H7
 #define __GPIO_BASE D3_AHB1PERIPH_BASE
 #endif
-#define __GPIOX(x) ((uint32_t)(__GPIO_BASE + ((x) << 10)))
-#define __PIN(x) ((uint16_t)(1 << x))
+#define __STM32_GPIOX(x) ((uint32_t)(__GPIO_BASE + ((x) << 10)))
+#define __STM32_PIN(x) ((uint16_t)(1 << x))
 
 void stm32IOInit (ioRes_t ioRes);
 bool stm32IORead (ioRes_t ioRes);
-void stm32IOWrite (ioRes_t ioRes);
+void stm32IOWrite (ioRes_t ioRes, implIOStat_t sta);
 void stm32IOHi (ioRes_t ioRes);
 void stm32IOLo (ioRes_t ioRes);
 void stm32IOToggle (ioRes_t ioRes);

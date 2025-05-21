@@ -24,5 +24,5 @@
 void
 trImplInit (void)
 {
-    implIOInterfaceInit();
+  implIOInterfaceInit ();
 }

@@ -31,16 +31,15 @@
 
 static implIOInterface_t g_implIOInterface = { 0 };
 
-void
-implIOInit (trArrow_t arrow)
+static void
+__implIOConfigPlatformTag (trArrow_t *arrow)
 {
-  uint8_t isInputIO = 0;
-  switch (arrow.ires)
+  switch (arrow->ires)
     {
 #define _implIoCaseOutputIO(k)                                                \
   case IMPL_RES (IMPL_OUTPUT_IO, k):                                          \
-    PG_RESIO (arrow.pres, IMPL_MAP_PLATFORM_RES (IMPL_OUTPUT_IO, k));         \
-    PG_RES (arrow.pres, M_OutputIO, m_IO##k);                                 \
+    PG_RESIO (arrow->pres, IMPL_MAP_PLATFORM_RES (IMPL_OUTPUT_IO, k));        \
+    PG_RES (arrow->pres, M_OutputIO, m_IO##k);                                \
     break;
 
       _implIoCaseOutputIO (1);
@@ -48,6 +47,19 @@ implIOInit (trArrow_t arrow)
     default:
       break;
     }
+}
+
+void
+implIOInit (trArrow_t arrow)
+{
+  bool isInputIO = 0;
+
+  __implIOConfigPlatformTag (&arrow);
+
+  if (platformGetMajorRes (arrow.pres) == PLATFORM_RES_MAJOR (M_InputIO))
+    isInputIO = true;
+  else
+    isInputIO = false;
 
 #if defined(RUNNING_PLATFORM_IS_STM32)
   if (!isInputIO)
@@ -60,33 +72,51 @@ implIOInit (trArrow_t arrow)
 bool
 implIORead (trArrow_t arrow)
 {
-  UNUSED (arrow);
+  __implIOConfigPlatformTag (&arrow);
 
-  return true;
+#if defined(RUNNING_PLATFORM_IS_STM32)
+    return stm32IORead (arrow.pres);
+#endif
 }
 
 void
-implIOWrite (trArrow_t arrow)
+implIOWrite (trArrow_t arrow, implIOStat_t sta)
 {
-  UNUSED (arrow);
+  __implIOConfigPlatformTag (&arrow);
+
+#if defined(RUNNING_PLATFORM_IS_STM32)
+    stm32IOWrite (arrow.pres, sta);
+#endif
 }
 
 void
 implIOHi (trArrow_t arrow)
 {
-  UNUSED (arrow);
+  __implIOConfigPlatformTag (&arrow);
+
+#if defined(RUNNING_PLATFORM_IS_STM32)
+    stm32IOHi (arrow.pres);
+#endif
 }
 
 void
 implIOLo (trArrow_t arrow)
 {
-  UNUSED (arrow);
+  __implIOConfigPlatformTag (&arrow);
+
+#if defined(RUNNING_PLATFORM_IS_STM32)
+    stm32IOLo (arrow.pres);
+#endif
 }
 
 void
 implIOToggle (trArrow_t arrow)
 {
-  UNUSED (arrow);
+  __implIOConfigPlatformTag (&arrow);
+
+#if defined(RUNNING_PLATFORM_IS_STM32)
+    stm32IOToggle (arrow.pres);
+#endif
 }
 
 void

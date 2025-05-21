@@ -47,7 +47,7 @@ typedef platformResource_t ioRes_t;
 #define PLATFORM_RES_MAJOR(source) CONTACT (platformRes_Major_, source)
 #define PLATFORM_RES_MINOR(source) CONTACT (platformRes_Minor_, source)
 
-#define PG_RES(pres, major, minor)                                             \
+#define PG_RES(pres, major, minor)                                            \
   do                                                                          \
     {                                                                         \
       pres = (pres & 0xffff0fff) | (PLATFORM_RES_MAJOR (major) << 12);        \
@@ -55,7 +55,7 @@ typedef platformResource_t ioRes_t;
     }                                                                         \
   while (0)
 
-#define PG_RESIO(pres, map)                                                    \
+#define PG_RESIO(pres, map)                                                   \
   do                                                                          \
     {                                                                         \
       pres = (pres & 0xffffff00) | DEFIO_TAG__ (map);                         \
@@ -120,7 +120,7 @@ enum __minorPlatfromRes_e
 /* this enum must has the same order as the __minorPlatfromRes_e */
 enum __platformResourceMinor_e
 {
-  
+
   PLATFORM_RES_MINOR (m_None),
   PLATFORM_RES_MINOR (m_IO1) = 1,
   PLATFORM_RES_MINOR (m_IO2),
