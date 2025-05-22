@@ -29,7 +29,6 @@ platformInitlize (void)
 #endif
   platformSystemClockConfig ();
 
-  __HAL_RCC_GPIOE_CLK_ENABLE ();
   __HAL_RCC_GPIOC_CLK_ENABLE ();
   __HAL_RCC_GPIOH_CLK_ENABLE ();
   __HAL_RCC_GPIOB_CLK_ENABLE ();

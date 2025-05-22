@@ -36,13 +36,15 @@ __implIOConfigPlatformTag (trArrow_t *arrow)
 {
   switch (arrow->ires)
     {
-#define _implIoCaseOutputIO(k)                                                \
+#define isCaseOutputIO(k)                                                \
   case IMPL_RES (IMPL_OUTPUT_IO, k):                                          \
     PG_RESIO (arrow->pres, IMPL_MAP_PLATFORM_RES (IMPL_OUTPUT_IO, k));        \
     PG_RES (arrow->pres, M_OutputIO, m_IO##k);                                \
     break;
 
-      _implIoCaseOutputIO (1);
+#ifdef IMPL_OUTPUT_IO_1__MAP__PLATFORM_RES
+      isCaseOutputIO (1);
+#endif
 
     default:
       break;

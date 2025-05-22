@@ -25,6 +25,12 @@
 #include "platform/periph/io/io_af.h"
 #include "platform/periph/rcc/rcc.h"
 
+#ifdef STM32H7
+#define __GPIO_BASE ((uint32_t)(D3_AHB1PERIPH_BASE))
+#endif
+#define __STM32_GPIOX(x) ((uint32_t)(__GPIO_BASE + ((x) << 10)))
+#define __STM32_PIN(x) ((uint16_t)(1 << x))
+
 struct ioGpioxRcc_s
 {
   platformRccPeriph_t rcc;
@@ -47,6 +53,10 @@ stm32IOInit (ioRes_t ioRes)
   uint16_t pin = __STM32_PIN (platformGetGpioPin (ioRes));
 
   GPIO_InitTypeDef GPIO_InitStruct = { 0 };
+
+  uint32_t idx = ((uint32_t)gpiox - __GPIO_BASE) >> 10;
+  platformRccPeriph_t rccPeriph = ioGpioxRcc[idx].rcc;
+  stm32RccClockCmd (rccPeriph, ENABLE);
 
   GPIO_InitStruct.Pin = pin;
 
