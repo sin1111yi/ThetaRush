@@ -73,6 +73,25 @@ local function parse_input_parameters(args)
 	end
 end
 
+local function get_os()
+	if os.getenv("windir") or os.getenv("OS") == "Windows_NT" then
+		return "Windows"
+	end
+
+	local uname = io.popen("uname -s 2>/dev/null", "r"):read("*a") or ""
+	uname = uname:gsub("%s+", "")
+
+	if uname == "Linux" then
+		return "Linux"
+	elseif uname == "Darwin" then
+		return "macOS"
+	elseif uname == "FreeBSD" then
+		return "FreeBSD"
+	else
+		return "Unknown"
+	end
+end
+
 parse_input_parameters(arg)
 
 if config.clean ~= nil then
@@ -81,6 +100,7 @@ if config.clean ~= nil then
 	os.exit(0)
 end
 
+local current_os = get_os()
 local chead_file, err, cmake_file
 local chead_file_name = config.target .. "/target.h"
 local cmake_file_name = config.target .. "/target.cmake"
@@ -240,7 +260,16 @@ end
 local outputIoNum = 0
 local inputIoNum = 0
 
-for k, io in ipairs(target.io) do
+chead_file:write(string.format([[
+/** @brief Their are target platform configurations generated from "%s/target.lua".
+  *        They are mostly MCU peripheral related configurations.
+  *
+  * DO NOT MODIFY!
+  */
+]], config.target))
+
+-- generate configurations about IOs
+for _, io in ipairs(target.io) do
 	local ioArrow = {
 		device = nil,
 		implResource = nil,
@@ -254,7 +283,7 @@ for k, io in ipairs(target.io) do
 	elseif io.set == tr.set.key then
 		inputIoNum = inputIoNum + 1
 		ioArrow.device = io.owner
-		ioArrow.impl = "IMPL_RES" .. "(" .. tr.impl.input_io .. ", " ..  inputIoNum .. ")"
+		ioArrow.impl = "IMPL_RES" .. "(" .. tr.impl.input_io .. ", " .. inputIoNum .. ")"
 		ioArrow.platformResource = tr.impl.input_io .. "_" .. inputIoNum .. "__MAP__" .. "PLATFORM_RES"
 	end
 	chead.add_marco("USING_" .. ioArrow.device, true)
@@ -262,8 +291,51 @@ for k, io in ipairs(target.io) do
 	chead.add_marco(ioArrow.platformResource, io.source)
 end
 
+chead_file:write(string.format([[
+/** @brief Their are driver configurations generated from "%s/target.lua".
+  *        They are mostly drivers ralated configurations.
+  *
+  */
+]], config.target))
+
+-- generate configurations about Lights
+if target.light ~= nil then
+	local light = target.light
+	chead.add_marco("LED_DRIVER_MODE", light.led.mode)
+end
+
 print(string.format(
 	[[
 target_config_gen.lua finished, file generated at %s.]],
 	config.target
 ))
+
+chead_file:close()
+cmake_file:close()
+
+local function has_exec(cmd)
+	local check_cmd
+
+	if current_os == "Windows" then
+		check_cmd = string.format('where "%s" 2>nul', cmd)
+	else
+		check_cmd = string.format('which "%s" >/dev/null 2>&1', cmd)
+	end
+
+	return os.execute(check_cmd)
+end
+
+if config.verbose then
+	if current_os == "Windows" then
+		print("Current OS is Windows, verbose is not supported on it for now. Please check files directly.")
+	else
+		local dumper
+		if has_exec("ccat") then
+			dumper = "ccat"
+		else
+			dumper = "cat"
+		end
+		print(string.format("\r\n%s/target.h\r\n", config.target))
+		os.execute(string.format("%s %s", dumper, config.target .. "/target.h"))
+	end
+end

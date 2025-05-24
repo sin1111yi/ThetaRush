@@ -29,6 +29,14 @@ M.info = {
     debug = tr.set.debug.enable,
 }
 
+M.light = {
+    led = {
+        mode = 1
+    },
+
+    led_strip = nil
+}
+
 M.io = {
     {
         source = "PE3",

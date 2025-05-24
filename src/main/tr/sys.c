@@ -39,8 +39,8 @@ systemRun (void)
 {
   while (1)
     {
-      drvLedOff(TR_DEVICE (devRunLed, 1));
-      HAL_Delay (200);
+      drvLedToggle(TR_DEVICE (devRunLed, 1));
+      HAL_Delay (100);
     }
 }
 

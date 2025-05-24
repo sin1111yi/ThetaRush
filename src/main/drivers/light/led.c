@@ -67,10 +67,11 @@ void
 drvLedOn (trDevice_t dev)
 {
   drvLightLed_t *instance = __drvLedGetInstance (dev);
-#if (!defined(LED_DRIVER_MODE) || LED_DRIVER_MODE == 0)
-  implIOInterfaceHandle ()->pIOWrite (instance->arrow, IMPL_IO_STAT_LOW);
-#else
+
+#if (defined(LED_DRIVER_MODE) && LED_DRIVER_MODE == 1)
   implIOInterfaceHandle ()->pIOWrite (instance->arrow, IMPL_IO_STAT_HIGH);
+#else
+  implIOInterfaceHandle ()->pIOWrite (instance->arrow, IMPL_IO_STAT_LOW);
 #endif
 }
 
@@ -78,10 +79,11 @@ void
 drvLedOff (trDevice_t dev)
 {
   drvLightLed_t *instance = __drvLedGetInstance (dev);
-#if (!defined(LED_DRIVER_MODE) || LED_DRIVER_MODE == 0)
-  implIOInterfaceHandle ()->pIOWrite (instance->arrow, IMPL_IO_STAT_HIGH);
-#else
+
+#if (defined(LED_DRIVER_MODE) && LED_DRIVER_MODE == 1)
   implIOInterfaceHandle ()->pIOWrite (instance->arrow, IMPL_IO_STAT_LOW);
+#else
+  implIOInterfaceHandle ()->pIOWrite (instance->arrow, IMPL_IO_STAT_HIGH);
 #endif
 }
 
