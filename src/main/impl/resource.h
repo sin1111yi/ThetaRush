@@ -32,10 +32,10 @@
  *              e.g. PC13 has pin number 13 -> 0b 00 1101
  *        [4:7] GPIO Port Index
  *              e.g. PC13 has GPIOC -> 0b 00 1100
- *        [8:11] Platform Source Minor Part
+ *        [8:15] Platform Source Minor Part
  *              e.g. PE3 is output IO 1 -> 0xb0001 for 1
  *                   PE9 is timer1 Channel 1 -> 0b0001 for channel 1
- *        [12:15] Platform Source Major Part
+ *        [15:23] Platform Source Major Part
  *              e.g. PE9 is timer1 Channel 1 -> M_resTIM
  *
  *
@@ -47,10 +47,11 @@ typedef platformResource_t ioRes_t;
 #define PLATFORM_RES_MAJOR(source) CONTACT (platformRes_Major_, source)
 #define PLATFORM_RES_MINOR(source) CONTACT (platformRes_Minor_, source)
 
+// PG means "pres generate"
 #define PG_RES(pres, major, minor)                                            \
   do                                                                          \
     {                                                                         \
-      pres = (pres & 0xffff0fff) | (PLATFORM_RES_MAJOR (major) << 12);        \
+      pres = (pres & 0xffff0fff) | (PLATFORM_RES_MAJOR (major) << 15);        \
       pres = (pres & 0xfffff0ff) | (PLATFORM_RES_MINOR (minor) << 8);         \
     }                                                                         \
   while (0)
@@ -86,7 +87,6 @@ enum __platformResourceMajor_e
 
 enum __minorPlatfromRes_e
 {
-  m_None,
   m_IO1 = 1,
   m_IO2,
   m_IO3,
@@ -120,8 +120,6 @@ enum __minorPlatfromRes_e
 /* this enum must has the same order as the __minorPlatfromRes_e */
 enum __platformResourceMinor_e
 {
-
-  PLATFORM_RES_MINOR (m_None),
   PLATFORM_RES_MINOR (m_IO1) = 1,
   PLATFORM_RES_MINOR (m_IO2),
   PLATFORM_RES_MINOR (m_IO3),
